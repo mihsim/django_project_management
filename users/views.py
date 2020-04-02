@@ -69,5 +69,15 @@ def account_logout(request):
     if request.method == 'POST':
         logout(request)
     return redirect('project:home')
+
+
+@login_required
+def account_delete(request):
+    if request.method == 'POST':
+        user = User.objects.get(username=request.user.username)
+        user.delete()
+        return redirect("project:home")
+
+
         
 

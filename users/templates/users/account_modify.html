@@ -71,7 +71,8 @@
         </form>
     </nav>
     <p>Delete your account</p>
-    <form>
+    <form action="{% url 'users:delete' %}" method="POST">
+        {% csrf_token %}
         <button type="submit" class="btn btn-outline-danger">Delete</button>
     </form>
 {% endblock %}
