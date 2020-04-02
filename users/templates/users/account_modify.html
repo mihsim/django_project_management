@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+    <h1>Change your data</h1>
+{% endblock %}
+
+{% block content_body %}
+    {{ message }}
+    <p>Change username and email:</p>
+    <nav class="navbar navbar-light">
+        <form action="{% url 'users:modify' %}" method="POST">
+            {% csrf_token %}
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1" style="width: 40px">#</span>
+                </div>
+                <input type="text" name="username" class="form-control" value="{{ user.username }}" aria-label="Username" aria-describedby="basic-addon1" required>
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1" style="width: 40px">@</span>
+                </div>
+                <input type="email" name="email" class="form-control" value="{{ user.email }}" aria-label="Email" aria-describedby="basic-addon1" required>
+            </div>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1" style="width: 40px">*</span>
+                </div>
+                <input type="password" name="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required>
+            </div>
+            <button type="submit" class="btn btn-outline-success">Change</button>
+        </form>
+    </nav>
+
+    <p>Change password:</p>
+
+    {% if  password_changed %}
+        <div class="alert alert-success" role="alert">{{ password_changed }}</div>
+    {% endif %}
+    {% if password_change_error %}
+        <div class="alert alert-danger" role="alert">{{ password_change_error }}</div>
+    {% endif %}
+    <nav class="navbar navbar-light">
+        <form action="{% url 'users:change_password' %}" method="POST">
+            {% csrf_token %}
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1" style="width: 40px">*</span>
+                </div>
+                <input type="password" name="old_password" class="form-control" placeholder="Old Password" aria-label="Password" aria-describedby="basic-addon1" required>
+            </div>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1" style="width: 40px">*</span>
+                </div>
+                <input type="password" name="new_password1" class="form-control" placeholder="New Password" aria-label="Password" aria-describedby="basic-addon1" required>
+            </div>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1" style="width: 40px">*</span>
+                </div>
+                <input type="password" name="new_password2" class="form-control" placeholder="Repeat New Password" aria-label="Password" aria-describedby="basic-addon1" required>
+            </div>
+            <button type="submit" class="btn btn-outline-success">Change</button>
+        </form>
+    </nav>
+    <p>Delete your account</p>
+    <form>
+        <button type="submit" class="btn btn-outline-danger">Delete</button>
+    </form>
+{% endblock %}
