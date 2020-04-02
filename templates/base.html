@@ -24,15 +24,20 @@
                 <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            {% if user.is_authenticated %}
+        {% if user.is_authenticated %}
+            <form class="form-inline my-2 my-lg-0" action="">
                 <button type="button" class="btn btn-light" disabled>{{ user.username }}</button>
+            </form>
+            <form class="form-inline my-2 my-lg-0" action="{% url 'users:logout' %}" method="POST">
+                {% csrf_token %}
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log Out</button>
-            {% else %}
+            </form>
+        {% else %}
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign Up</button>
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log In</button>
-            {% endif %}
+
         </form>
+        {% endif %}
     </header>
     <!--Section-->
     <section class="row top_to_bottom">
