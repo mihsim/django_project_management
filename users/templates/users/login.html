@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+    Log In
+{% endblock %}
+
+{% block content_body %}
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endif %}
+    <form action="{% url 'users:login' %}" method="POST">
+        {% csrf_token %}
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1" style="width: 40px">#</span>
+            </div>
+            <input type="text" name="username" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1" style="width: 40px">*</span>
+            </div>
+            <input type="password" name="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
+        </div>
+        <button type="submit" class="btn btn-outline-success" type="button">Log In</button>
+    </form>
+{% endblock %}

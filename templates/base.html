@@ -25,18 +25,24 @@
             </li>
         </ul>
         {% if user.is_authenticated %}
+            <!--Modify account-->
             <form class="form-inline my-2 my-lg-0" action="">
                 <button type="button" class="btn btn-light" disabled>{{ user.username }}</button>
             </form>
+            <!--Logout-->
             <form class="form-inline my-2 my-lg-0" action="{% url 'users:logout' %}" method="POST">
                 {% csrf_token %}
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log Out</button>
             </form>
         {% else %}
+            <!--Signup-->
+            <form class="form-inline my-2 my-lg-0" action="{% url 'users:create' %}" method="GET">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign Up</button>
+            </form>
+            <!--Login-->
+            <form class="form-inline my-2 my-lg-0" action="{% url 'users:login' %}" method="GET">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log In</button>
-
-        </form>
+            </form>
         {% endif %}
     </header>
     <!--Section-->
