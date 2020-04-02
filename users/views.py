@@ -11,7 +11,7 @@ def account_create(request):
             user = User.objects.create_user(username=request.POST["username"],
                                             password=request.POST["password"],
                                             email=request.POST["email"],
-                                           )
+                                            )
             user.save()
         except IntegrityError:
             return render(request, 'users/create.html', {'error_message': 'Selected username is not available, please select another username.'})
@@ -26,7 +26,13 @@ def account_modify(request):
     if request.method == "GET":
         return render(request, "users/account_modify.html")
     else:
-        pass
+        if request.user.check_password(request.POST['password']):
+            request.user.username = request.POST['username']
+            request.user.email = request.POST['email']
+            request.user.save()
+            return render(request, "users/account_modify.html", {'account_modification_success': 'Your data was successfully updated"'})
+        else:
+            return render(request, "users/account_modify.html", {'account_modify_error': 'Wrong password!'})
 
 
 @login_required

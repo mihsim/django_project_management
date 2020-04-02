@@ -5,8 +5,13 @@
 {% endblock %}
 
 {% block content_body %}
-    {{ message }}
     <p>Change username and email:</p>
+    {% if account_modify_error %}
+        <div class="alert alert-warning" role="alert">{{ account_modify_error }}</div>
+    {% endif %}
+    {% if account_modification_success %}
+        <div class="alert alert-success" role="alert">{{ account_modification_success }}</div>
+    {% endif %}
     <nav class="navbar navbar-light">
         <form action="{% url 'users:modify' %}" method="POST">
             {% csrf_token %}
@@ -39,7 +44,7 @@
         <div class="alert alert-success" role="alert">{{ password_changed }}</div>
     {% endif %}
     {% if password_change_error %}
-        <div class="alert alert-danger" role="alert">{{ password_change_error }}</div>
+        <div class="alert alert-warning" role="alert">{{ password_change_error }}</div>
     {% endif %}
     <nav class="navbar navbar-light">
         <form action="{% url 'users:change_password' %}" method="POST">
