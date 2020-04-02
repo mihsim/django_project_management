@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content_title %}
-    <h1>Change your data</h1>
+    <h1 class="display-4 text-center">Change your data</h1>
 {% endblock %}
 
 {% block content_body %}
-    <p>Change username and email:</p>
+    <h3 class="text-center" style="padding-top: 30px">Change username and email:</h3>
     {% if account_modify_error %}
         <div class="alert alert-warning" role="alert">{{ account_modify_error }}</div>
     {% endif %}
     {% if account_modification_success %}
         <div class="alert alert-success" role="alert">{{ account_modification_success }}</div>
     {% endif %}
-    <nav class="navbar navbar-light">
+    <nav class="navbar navbar-light text-center">
         <form action="{% url 'users:modify' %}" method="POST">
             {% csrf_token %}
+
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1" style="width: 40px">#</span>
@@ -38,15 +39,14 @@
         </form>
     </nav>
 
-    <p>Change password:</p>
-
+    <h3 class="text-center" style="padding-top: 30px">Change password:</h3>
     {% if  password_changed %}
         <div class="alert alert-success" role="alert">{{ password_changed }}</div>
     {% endif %}
     {% if password_change_error %}
         <div class="alert alert-warning" role="alert">{{ password_change_error }}</div>
     {% endif %}
-    <nav class="navbar navbar-light">
+    <nav class="navbar navbar-light text-center">
         <form action="{% url 'users:change_password' %}" method="POST">
             {% csrf_token %}
             <div class="input-group">
@@ -70,9 +70,11 @@
             <button type="submit" class="btn btn-outline-success">Change</button>
         </form>
     </nav>
-    <p>Delete your account</p>
-    <form action="{% url 'users:delete' %}" method="POST">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-outline-danger">Delete</button>
-    </form>
+    <h3 class="text-center" style="padding-top: 30px">Delete your account:</h3>
+    <div class="text-center">
+        <form action="{% url 'users:delete' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger">Delete</button>
+        </form>
+    </div>
 {% endblock %}

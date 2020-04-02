@@ -28,22 +28,10 @@ footer{
 .top_to_bottom{
     /*view height - header height - footer height*/
     height: calc(100vh - 92px);
-
-
 }
-
-#section_main {
-    position:absolute;
-    width:100%;
-    top:40px;
-    bottom:42px;
-    overflow-y:auto;
-}
-
 
 #nav_sidebar {
       width: 250px;
-
 }
 
 #sidebar {
@@ -58,7 +46,6 @@ footer{
 
 
 #sidebar .nav a{
-
   background: none;
   border-bottom: 1px solid #455A64;
   color: #CFD8DC;

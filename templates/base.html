@@ -49,7 +49,7 @@
     <!--Section-->
     <section class="row top_to_bottom">
         <!-- SIDEBAR -->
-        <nav  class="bg-light" id="nav_sidebar">
+        <nav id="nav_sidebar">
             <div class="sidebar-sticky" id="sidebar">
 
                 <ul class="nav flex-column">
@@ -69,16 +69,12 @@
             </div>
         </nav>
         <!--Specific-->
-        <div>
-
-                {% block content_title %}
-                {% endblock %}
-                <hr class="my-4">
-                {% block content_body %}
-                {% endblock %}
-
-
-
+        <div class="col" >
+            {% block content_title %}
+            {% endblock %}
+            <hr class="my-4">
+            {% block content_body %}
+            {% endblock %}
         </div>
     </section>
     <!--Footer-->
