@@ -11,6 +11,7 @@ def account_create(request):
                                         email=request.POST["email"],
                                         )
         user.save()
+        login(request, user)
         return render(request, 'users/create.html')
     else:
         return render(request, 'users/create.html')
