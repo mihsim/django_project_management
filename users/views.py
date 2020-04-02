@@ -2,15 +2,19 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
+from django.db import IntegrityError
 
 
 def account_create(request):
     if request.method == "POST":
-        user = User.objects.create_user(username=request.POST["username"],
-                                        password=request.POST["password"],
-                                        email=request.POST["email"],
-                                        )
-        user.save()
+        try:
+            user = User.objects.create_user(username=request.POST["username"],
+                                            password=request.POST["password"],
+                                            email=request.POST["email"],
+                                           )
+            user.save()
+        except IntegrityError:
+            return render(request, 'users/create.html', {'error_message': 'Selected username is not available, please select another username.'})
         login(request, user)
         return render(request, 'users/create.html')
     else:
