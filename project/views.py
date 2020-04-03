@@ -31,12 +31,11 @@ def project_create(request):
 
 @login_required
 def project_view(request, project_id):
-    project = Project.objects.filter(id=project_id).first()
-    contributors = None
-    sprints = None
-    tasks = None
+    project = Project.objects.get(id=project_id)
+    project_contributors = ProjectParticipants.objects.get(project=project_id)
+    project_contributors = project_contributors.user.all()
     content = {"project": project,
-               "contributors": contributors,
+               "project_contributors": project_contributors,
                }
     return render(request, "project/project.html", content)
 
@@ -76,7 +75,9 @@ def invite_contributors(request, project_id):
 def add_contributor(request, project_id, contributor_id):
     project = Project.objects.get(id=project_id)
     contributor = User.objects.get(id=contributor_id)
-    participant = ProjectParticipants.objects.create(project=project)
-    participant.user.add(contributor)
-    redirect("project:project", project_id)
+    try:
+        project_participants = ProjectParticipants.objects.get(project=project_id)
+    except ProjectParticipants.DoesNotExist:
+        project_participants = ProjectParticipants.objects.create(project=project)
+    project_participants.user.add(contributor)
     return redirect('project:project', project_id)

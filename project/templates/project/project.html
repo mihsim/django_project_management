@@ -19,6 +19,15 @@
         <button type="submit" class="btn btn-primary">Change project</button>
     </form>
     <form class="text-center" action="{% url 'project:invite_contributors' project.id %}" method="GET">
-        <button type="submit" class="btn btn-primary">Invite contributers</button>
+        <button type="submit" class="btn btn-primary">Invite contributors</button>
     </form>
+    {% if project_contributors %}
+        <ul class="list-group">
+
+        <h3>Project contributors:</h3>
+        {% for contributor in project_contributors %}
+            <li class="list-group-item">{{ contributor }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}

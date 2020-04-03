@@ -14,7 +14,6 @@ weight = (
 )
 
 
-# Create your models here.
 class Project(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField(blank=True)
