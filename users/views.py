@@ -16,7 +16,7 @@ def account_create(request):
         except IntegrityError:
             return render(request, 'users/create.html', {'error_message': 'Selected username is not available, please select another username.'})
         login(request, user)
-        return render(request, 'users/create.html')
+        return redirect('home:home')
     else:
         return render(request, 'users/create.html')
 
@@ -59,7 +59,7 @@ def account_login(request):
         user = authenticate(username=request.POST['username'], password=request.POST['password'])
         if user:
             login(request, user)
-            return redirect("project:home")
+            return redirect("home:home")
         else:
             return render(request, 'users/login.html', {'error': 'Username and password did not match!'})
 
@@ -68,7 +68,7 @@ def account_login(request):
 def account_logout(request):
     if request.method == 'POST':
         logout(request)
-    return redirect('project:home')
+    return redirect('home:home')
 
 
 @login_required
@@ -76,7 +76,7 @@ def account_delete(request):
     if request.method == 'POST':
         user = User.objects.get(username=request.user.username)
         user.delete()
-        return redirect("project:home")
+        return redirect("home:home")
 
 
         

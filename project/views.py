@@ -1,7 +1,9 @@
-from django.shortcuts import render
-
-# Create your views here.
+from django.shortcuts import render, HttpResponse
 
 
-def home(request):
-    return render(request, 'home.html')
+def projects(request):
+    return HttpResponse("Banana")
+
+
+def project_create(request):
+    return HttpResponse("Banana")
