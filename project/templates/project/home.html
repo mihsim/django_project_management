@@ -9,7 +9,22 @@
         <button class="btn btn-primary">Create new project</button>
     </a>
     <hr>
-    List of projects:
+    {% if projects_admin %}
+        <h3>List of projects that you are administrator to:</h3>
+        <ul class="list-group">
+            {% for project in projects_admin %}
+                <a href="{% url "project:project" project.id%}" class="list-group-item list-group-item-action">{{ project.name }}</a>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
+    {% if projects_contributor %}
+        <h3>List of projects that you contribute to:</h3>
+        <ul class="list-group">
+            {% for project in projects_contributor %}
+                <li class="list-group-item">{{ project.name }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
 {% endblock %}

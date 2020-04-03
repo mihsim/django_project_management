@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+    {{ project.name }}
+{% endblock %}
+
+{% block content_body %}
+    <ul class="list-group">
+        <h3>Project description:</h3>
+        <li class="list-group-item">{{ project.description }}</li>
+        {% if participants %}
+            <h3>Project participants:</h3>
+            {% for contributor in contributors %}
+                <li class="list-group-item">contributor.name</li>
+            {% endfor %}
+        {% endif %}
+    </ul>
+    <form class="text-center" action="{% url 'project:modify' project.id %}" method="GET">
+        <button type="submit" class="btn btn-primary">Change project</button>
+    </form>
+    <form class="text-center" action="{% url 'project:invite_contributors' project.id %}" method="GET">
+        <button type="submit" class="btn btn-primary">Invite contributers</button>
+    </form>
+{% endblock %}

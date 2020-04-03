@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+
+{% block content_title %}
+    Search contributor
+{% endblock %}
+
+
+{% block content_body %}
+    {% if not contributor_not_found and not contributor_found%}
+        <h3>Search contributors for project: {{ project.name }}</h3>
+        <form class="form-inline my-2 my-lg-0" action="{% url 'project:invite_contributors' project.id %}" method="POST">
+            {% csrf_token %}
+            <input class="form-control mr-sm-2" type="search" placeholder="email" aria-label="Search" name="email_to_check">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    {% endif %}
+
+    {# if 'POST' request had 'contributor_found' #}
+    {% if contributor_found %}
+        <form action="{% url 'project:add_contributor' project.id contributor_found.id %}" method="POST">
+            {% csrf_token %}
+            <ul class="list-group-flush">
+                <li class="list-group-item"><h3>We found:</h3></li>
+                <li class="list-group-item">
+                    Username: {{ contributor_found.username }}<br>
+                    Email: {{ contributor_found.email }}
+                </li>
+            </ul>
+            <div class="text-center">
+                <button class="btn btn-secondary" formaction="{% url 'project:invite_contributors' project.id %}" formmethod="GET">Search again</button>
+                <button class="btn btn-primary">Send invite</button>
+            </div>
+        </form>
+    {% endif %}
+    {% if contributor_not_found %}
+        {{ contributor_not_found }}
+    {% endif %}
+
+{% endblock %}

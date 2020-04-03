@@ -29,7 +29,7 @@ class ProjectParticipants(models.Model):
     user = models.ManyToManyField(User)
 
     def __str__(self):
-        return self.project
+        return self.project.name
 
 
 class Sprint(models.Model):
