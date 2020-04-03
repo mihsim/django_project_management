@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content_title %}
+    Project page
+{% endblock %}
+
+{% block content_body %}
+    <a href="{% url 'project:create' %}" >
+        <button class="btn btn-primary">Create new project</button>
+    </a>
+    <hr>
+    List of projects:
+
+
+{% endblock %}
