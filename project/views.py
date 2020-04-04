@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from .models import Project, ProjectParticipants
+from .models import Project, ProjectParticipants, ProjectParticipantsInvites
 
 
 
@@ -32,10 +32,13 @@ def project_create(request):
 @login_required
 def project_view(request, project_id):
     project = Project.objects.get(id=project_id)
-    project_contributors = ProjectParticipants.objects.get(project=project_id)
-    project_contributors = project_contributors.user.all()
+    try:
+        project_with_participants = ProjectParticipants.objects.get(project=project_id)
+        project_participants = project_with_participants.user.all()
+    except ProjectParticipants.DoesNotExist:
+        project_participants = None
     content = {"project": project,
-               "project_contributors": project_contributors,
+               "project_participants": project_participants,
                }
     return render(request, "project/project.html", content)
 
@@ -54,10 +57,10 @@ def project_modify(request, project_id):
         return redirect("project:project", project_id)
 
 
-def invite_contributors(request, project_id):
+def search_participants(request, project_id):
     project = Project.objects.filter(id=project_id).first()
     if request.method == "GET":
-        return render(request, "project/invite_contributors.html", {'project': project})
+        return render(request, "project/search_participants.html", {'project': project})
     else:
         email = request.POST['email_to_check']
         if email:
@@ -66,18 +69,18 @@ def invite_contributors(request, project_id):
             except User.DoesNotExist:
                 content = {'project': project,
                            'contributor_not_found': 'No registered user has that email.'}
-                return render(request, "project/invite_contributors.html", content)
-            return render(request, "project/invite_contributors.html", {'project': project,
+                return render(request, "project/search_participants.html", content)
+            return render(request, "project/search_participants.html", {'project': project,
                                                                         'contributor_found': contributor_found})
         return HttpResponse("POST not implemented yet")
 
 
-def add_contributor(request, project_id, contributor_id):
-    project = Project.objects.get(id=project_id)
-    contributor = User.objects.get(id=contributor_id)
-    try:
-        project_participants = ProjectParticipants.objects.get(project=project_id)
-    except ProjectParticipants.DoesNotExist:
-        project_participants = ProjectParticipants.objects.create(project=project)
-    project_participants.user.add(contributor)
-    return redirect('project:project', project_id)
+def invite_participant(request, project_id, participant_id):
+    invite_result, invite_message = ProjectParticipantsInvites.add_invite(project_id=project_id, from_user_id=request.user.id, to_user_id=participant_id)
+    project = Project.objects.filter(id=project_id).first()
+    content = {'project': project,
+               "invite_result": invite_result,
+               "invite_message": invite_message}
+
+    return render(request, "project/project.html", content)
+    #return redirect('project:project', project_id,)

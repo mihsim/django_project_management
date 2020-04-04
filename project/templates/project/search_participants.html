@@ -9,7 +9,7 @@
 {% block content_body %}
     {% if not contributor_not_found and not contributor_found%}
         <h3>Search contributors for project: {{ project.name }}</h3>
-        <form class="form-inline my-2 my-lg-0" action="{% url 'project:invite_contributors' project.id %}" method="POST">
+        <form class="form-inline my-2 my-lg-0" action="{% url 'project:search_participants' project.id %}" method="POST">
             {% csrf_token %}
             <input class="form-control mr-sm-2" type="search" placeholder="email" aria-label="Search" name="email_to_check">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -17,8 +17,8 @@
     {% endif %}
 
     {# if 'POST' request had 'contributor_found' #}
-    {% if contributor_found %}
-        <form action="{% url 'project:add_contributor' project.id contributor_found.id %}" method="POST">
+    {% if contributor_found and not invite_message %}
+        <form action="{% url 'project:invite_participant' project.id contributor_found.id %}" method="POST">
             {% csrf_token %}
             <ul class="list-group-flush">
                 <li class="list-group-item"><h3>We found:</h3></li>
@@ -28,7 +28,7 @@
                 </li>
             </ul>
             <div class="text-center">
-                <button class="btn btn-secondary" formaction="{% url 'project:invite_contributors' project.id %}" formmethod="GET">Search again</button>
+                <button class="btn btn-secondary" formaction="{% url 'project:search_participants' project.id %}" formmethod="GET">Search again</button>
                 <button class="btn btn-primary">Send invite</button>
             </div>
         </form>

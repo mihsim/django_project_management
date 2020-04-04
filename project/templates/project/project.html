@@ -8,26 +8,30 @@
     <ul class="list-group">
         <h3>Project description:</h3>
         <li class="list-group-item">{{ project.description }}</li>
-        {% if participants %}
-            <h3>Project participants:</h3>
-            {% for contributor in contributors %}
-                <li class="list-group-item">contributor.name</li>
-            {% endfor %}
-        {% endif %}
     </ul>
     <form class="text-center" action="{% url 'project:modify' project.id %}" method="GET">
         <button type="submit" class="btn btn-primary">Change project</button>
     </form>
-    <form class="text-center" action="{% url 'project:invite_contributors' project.id %}" method="GET">
+
+    {# If selected project has participants, then they are printed out #}
+
+    <ul class="list-group">
+        <h3>Project participants:</h3>
+        {% if invite_result == "Error" %}
+            <div class="alert alert-danger">{{ invite_message }}</div>
+        {% elif invite_result == "Success" %}
+            <div class="alert alert-success">{{ invite_message }}</div>
+        {% endif %}
+        {% if project_participants %}
+            {% for project_participant in project_participants %}
+                <li class="list-group-item">{{ project_participant }}</li>
+            {% endfor %}
+        {% else %}
+            <li class="list-group-item">This project has no participants</li>
+        {% endif %}
+    </ul>
+
+    <form class="text-center" action="{% url 'project:search_participants' project.id %}" method="GET">
         <button type="submit" class="btn btn-primary">Invite contributors</button>
     </form>
-    {% if project_contributors %}
-        <ul class="list-group">
-
-        <h3>Project contributors:</h3>
-        {% for contributor in project_contributors %}
-            <li class="list-group-item">{{ contributor }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
 {% endblock %}
