@@ -40,6 +40,7 @@ class ProjectParticipantsInvites(models.Model):
     @staticmethod
     def add_invite(project_id, from_user_id, to_user_id):
         """
+        This function is accessed when project administrator click invite participant button.
         1. Checks that project and users with provided id-s exist
         2. Checks that project does not have to_user as participant
         3. Checks that to_user does not have invitation to participate in project
@@ -74,8 +75,16 @@ class ProjectParticipantsInvites(models.Model):
     def decline_invite(self):
         pass
 
-    def delete_invite(self):
-        pass
+    @staticmethod
+    def delete_invite(project_id, to_user_id):
+        try:
+            project = Project.objects.get(id=project_id)
+            to_user = User.objects.get(id=to_user_id)
+            invite = ProjectParticipantsInvites.objects.get(project=project, to_user=to_user)
+        except (Project.DoesNotExist, User.DoesNotExist, ProjectParticipantsInvites.DoesNotExist):
+            return "Error", "Bad data provided!"
+        invite.delete()
+        return "Success", "Invite deleted!"
 
     def __str__(self):
         return self.project.name

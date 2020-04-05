@@ -8,5 +8,6 @@ urlpatterns = [
     path("<int:project_id>/", views.project_view, name="project"),
     path("<int:project_id>/modify/", views.project_modify, name="modify"),
     path("<int:project_id>/modify/search_participants/", views.search_participants, name="search_participants"),
-    path("<int:project_id>/<int:participant_id>/", views.invite_participant, name="invite_participant"),
+    path("<int:project_id>/<int:participant_id>/send", views.invite_send, name="invite_participant"),
+    path("<int:project_id>/<int:participant_id>/delete", views.invite_delete, name="invite_delete"),
 ]

@@ -14,7 +14,6 @@
     </form>
 
     {# If selected project has participants, then they are printed out #}
-
     <ul class="list-group">
         <h3>Project participants:</h3>
         {% if invite_result == "Error" %}
@@ -31,6 +30,24 @@
         {% endif %}
     </ul>
 
+    {# If project has invited partivipants who have not accepted the inviteinvites, then they will be printed out:  #}
+    <ul class="list-group">
+        <h3>Invited to participate:</h3>
+        {% if invite_delete_result == "Error" %}
+            <div class="alert alert-danger">{{ invite_delete_message }}</div>
+        {% elif invite_delete_result == "Success" %}
+            <div class="alert alert-success">{{ invite_delete_message }}</div>
+        {% endif %}
+        {% if project_invitees %}
+            {% for project_invitee in project_invitees %}
+                <li class="list-group-item">{{ project_invitee }}</li>
+            {% endfor %}
+        {% else %}
+            <li class="list-group-item">Nobody is invited to participate.</li>
+        {% endif %}
+    </ul>
+
+    {# Button to go and search new participants #}
     <form class="text-center" action="{% url 'project:search_participants' project.id %}" method="GET">
         <button type="submit" class="btn btn-primary">Invite contributors</button>
     </form>

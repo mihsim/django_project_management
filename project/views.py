@@ -32,15 +32,32 @@ def project_create(request):
 @login_required
 def project_view(request, project_id):
     project = Project.objects.get(id=project_id)
+    content = {"project": project}
+
+    project_participants = get_project_participants(project_id)
+    project_invitees = get_invited_to_participate(project_id)
+    content.update(**project_participants, **project_invitees)
+
+    return render(request, "project/project.html", content)
+
+
+def get_project_participants(project_id):
     try:
         project_with_participants = ProjectParticipants.objects.get(project=project_id)
         project_participants = project_with_participants.user.all()
     except ProjectParticipants.DoesNotExist:
         project_participants = None
-    content = {"project": project,
-               "project_participants": project_participants,
-               }
-    return render(request, "project/project.html", content)
+    return {"project_participants": project_participants}
+
+
+def get_invited_to_participate(project_id):
+    try:
+        invites = ProjectParticipantsInvites.objects.filter(project=project_id)
+        project_invitees = [invite.to_user for invite in invites]
+    except ProjectParticipantsInvites.DoesNotExist:
+        project_invitees = None
+    return {"project_invitees": project_invitees}
+
 
 
 @login_required
@@ -75,12 +92,21 @@ def search_participants(request, project_id):
         return HttpResponse("POST not implemented yet")
 
 
-def invite_participant(request, project_id, participant_id):
+def invite_send(request, project_id, participant_id):
     invite_result, invite_message = ProjectParticipantsInvites.add_invite(project_id=project_id, from_user_id=request.user.id, to_user_id=participant_id)
-    project = Project.objects.filter(id=project_id).first()
+    project = Project.objects.get(id=project_id)
     content = {'project': project,
                "invite_result": invite_result,
                "invite_message": invite_message}
 
     return render(request, "project/project.html", content)
-    #return redirect('project:project', project_id,)
+
+
+def invite_delete(request, project_id, participant_id):
+    result, message = ProjectParticipantsInvites.delete_invite(project_id=project_id, to_user_id=participant_id)
+    project = Project.objects.get(id=project_id)
+    content = {'project': project,
+               "invite_delete_result": result,
+               "invite_delete_message": message}
+
+    return render(request, "project/project.html", content)
