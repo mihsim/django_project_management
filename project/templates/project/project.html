@@ -9,18 +9,13 @@
         <h3>Project description:</h3>
         <li class="list-group-item">{{ project.description }}</li>
     </ul>
-    <form class="text-center" action="{% url 'project:modify' project.id %}" method="GET">
+    <form class="text-center" action="{% url 'project:change' project.id %}" method="GET">
         <button type="submit" class="btn btn-primary">Change project</button>
     </form>
 
     {# If selected project has participants, then they are printed out #}
     <ul class="list-group">
         <h3>Project participants:</h3>
-        {% if invite_result == "Error" %}
-            <div class="alert alert-danger">{{ invite_message }}</div>
-        {% elif invite_result == "Success" %}
-            <div class="alert alert-success">{{ invite_message }}</div>
-        {% endif %}
         {% if project_participants %}
             {% for project_participant in project_participants %}
                 <li class="list-group-item">{{ project_participant }}</li>

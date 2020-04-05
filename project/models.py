@@ -69,11 +69,26 @@ class ProjectParticipantsInvites(models.Model):
             invite.save()
             return "Success", "Invitation successfully sent."
 
-    def accept_invite(self):
-        pass
+    @staticmethod
+    def check_participant(project_id, to_user_email):
+        try:  # 1
+            to_user = User.objects.get(email=to_user_email)
+        except User.DoesNotExist:
+            return "Error", "No registered user has that email.", None
 
-    def decline_invite(self):
-        pass
+        try:  # 2
+            ProjectParticipants.objects.get(project=project_id, user=to_user)
+            return "Error", "This user is already participating!", to_user
+        except ProjectParticipants.DoesNotExist:
+            pass
+
+        try:  # 3
+            invite = ProjectParticipantsInvites.objects.get(project=project_id, to_user=to_user.id)
+            return "Error", f"This user is invited already, invite status is: {invite.status}", to_user
+        except ProjectParticipantsInvites.DoesNotExist:
+            # 4
+            return "Success", "Invitation can be sent.", to_user
+
 
     @staticmethod
     def delete_invite(project_id, to_user_id):

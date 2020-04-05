@@ -3,11 +3,12 @@ from . import views
 
 app_name = 'project'
 urlpatterns = [
-    path("", views.project_home, name="home"),
-    path("create/", views.project_create, name="create"),
-    path("<int:project_id>/", views.project_view, name="project"),
-    path("<int:project_id>/modify/", views.project_modify, name="modify"),
-    path("<int:project_id>/modify/search_participants/", views.search_participants, name="search_participants"),
-    path("<int:project_id>/<int:participant_id>/send", views.invite_send, name="invite_participant"),
-    path("<int:project_id>/<int:participant_id>/delete", views.invite_delete, name="invite_delete"),
+    path("", views.Projects.as_view(), name="home"),
+    path("create/", views.ProjectsCreate.as_view(), name="create"),
+    path("<int:project_id>/", views.ProjectView.as_view(), name="project"),
+    path("<int:project_id>/change/", views.ProjectChangeView.as_view(), name="change"),
+    path("<int:project_id>/search_participants/", views.ProjectInviteView.as_view(), name="search_participants"),
+    path("<int:project_id>/<int:participant_id>/send", views.ProjectInviteView.as_view(), name="send_invite"),
+    path("<int:project_id>/<int:participant_id>/delete", views.ProjectInviteView.as_view(), name="invite_delete"),
+
 ]
