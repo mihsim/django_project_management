@@ -35,7 +35,16 @@
         {# Prints out list of projects that user is invited to. #}
         <h3>You are invited to:</h3>
         {% for project in invited_to %}
-            <li class="list-group-item">{{ project }}</li>
+            <li class="list-group-item">
+                {# Using class="row" so project name and buttons could be on the same line. #}
+                <form role="form"  action="#" method="PUT" class="row">
+                    <div class="col">{{ project }}</div>
+                    <div class="col-auto">
+                        <button class="btn btn-outline-secondary btn-sm" type="submit" formaction="">Decline</button>
+                        <button class="btn btn-outline-success btn-sm" type="submit">Accept</button>
+                    </div>
+                </form>
+            </li>
         {% endfor %}
     {% endif %}
 
