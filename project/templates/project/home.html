@@ -9,25 +9,34 @@
         <button class="btn btn-primary">Create new project</button>
     </a>
     <hr>
-    {% if invited_to %}
-        
-    {% endif %}
-    {% if projects_admin %}
-        <h3>List of projects that you are administrator to:</h3>
+
+    {% if admin_to %}
+        {# Prints out list of projects user is administrator to. #}
+        <h3>You are administrator to:</h3>
         <ul class="list-group">
-            {% for project in projects_admin %}
-                <a href="{% url "project:project" project.id%}" class="list-group-item list-group-item-action">{{ project.name }}</a>
+            {% for project in admin_to %}
+                <a href="{% url "project:project" project.id %}" class="list-group-item list-group-item-action">{{ project }}</a>
             {% endfor %}
         </ul>
     {% endif %}
 
-    {% if projects_contributor %}
-        <h3>List of projects that you contribute to:</h3>
+    {% if participant_to %}
+        {# Prints out list of projects user is participating, but is not administrator to. #}
+        <h3>You are contributor to:</h3>
         <ul class="list-group">
-            {% for project in projects_contributor %}
-                <li class="list-group-item">{{ project.name }}</li>
+            {% for project in participant_to %}
+                {# project.project.id - project instance has a foreing key field named project.#}
+                <a href="{% url "project:project" project.project.id %}" class="list-group-item list-group-item-action">{{ project }}</a>
             {% endfor %}
         </ul>
+    {% endif %}
+
+    {% if invited_to %}
+        {# Prints out list of projects that user is invited to. #}
+        <h3>You are invited to:</h3>
+        {% for project in invited_to %}
+            <li class="list-group-item">{{ project }}</li>
+        {% endfor %}
     {% endif %}
 
 {% endblock %}

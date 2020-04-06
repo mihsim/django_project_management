@@ -37,8 +37,8 @@ class ProjectParticipantsInvites(models.Model):
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="to_user")
     status = models.CharField(max_length=10, default='Waiting')
 
-    @staticmethod
-    def add_invite(project_id, from_user_id, to_user_id):
+    @classmethod
+    def add_invite(cls, project_id, from_user_id, to_user_id):
         """
         This function is accessed when project administrator click invite participant button.
         1. Checks that project and users with provided id-s exist
@@ -61,42 +61,52 @@ class ProjectParticipantsInvites(models.Model):
             pass
 
         try:  # 3
-            invite = ProjectParticipantsInvites.objects.get(project=project_id, to_user=to_user_id)
+            invite = cls.objects.get(project=project_id, to_user=to_user_id)
             return "Error", f"This user is invited already, invite status is: {invite.status}"
-        except ProjectParticipantsInvites.DoesNotExist:
+        except cls.DoesNotExist:
             # 4
-            invite = ProjectParticipantsInvites(project=project, from_user=from_user, to_user=to_user)
+            invite = cls(project=project, from_user=from_user, to_user=to_user)
             invite.save()
             return "Success", "Invitation successfully sent."
 
-    @staticmethod
-    def check_participant(project_id, to_user_email):
-        try:  # 1
+    @classmethod
+    def accept_invite(cls):
+        pass
+
+    @classmethod
+    def check_participant(cls, project_id, to_user_email):
+        """
+        Checks if user with given email address is participating to project with given ID
+
+        :param project_id: Primary key to project
+        :param to_user_email: Email address to user that will be checked
+        :type project_id: int
+        :type to_user_email: str
+        :return: Returns message text with user instance if user exists.
+        :rtype: Tuple(string, string, User instance) or Tuple(string, string, None)
+        """
+        try:
             to_user = User.objects.get(email=to_user_email)
         except User.DoesNotExist:
             return "Error", "No registered user has that email.", None
-
-        try:  # 2
+        try:
             ProjectParticipants.objects.get(project=project_id, user=to_user)
             return "Error", "This user is already participating!", to_user
         except ProjectParticipants.DoesNotExist:
             pass
-
-        try:  # 3
-            invite = ProjectParticipantsInvites.objects.get(project=project_id, to_user=to_user.id)
+        try:
+            invite = cls.objects.get(project=project_id, to_user=to_user.id)
             return "Error", f"This user is invited already, invite status is: {invite.status}", to_user
-        except ProjectParticipantsInvites.DoesNotExist:
-            # 4
+        except cls.DoesNotExist:
             return "Success", "Invitation can be sent.", to_user
 
-
-    @staticmethod
-    def delete_invite(project_id, to_user_id):
+    @classmethod
+    def delete_invite(cls, project_id, to_user_id):
         try:
             project = Project.objects.get(id=project_id)
             to_user = User.objects.get(id=to_user_id)
-            invite = ProjectParticipantsInvites.objects.get(project=project, to_user=to_user)
-        except (Project.DoesNotExist, User.DoesNotExist, ProjectParticipantsInvites.DoesNotExist):
+            invite = cls.objects.get(project=project, to_user=to_user)
+        except (Project.DoesNotExist, User.DoesNotExist, cls.DoesNotExist):
             return "Error", "Bad data provided!"
         invite.delete()
         return "Success", "Invite deleted!"

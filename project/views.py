@@ -16,11 +16,12 @@ class Projects(View):
     """
     def get(self, request):
         user = User.objects.get(id=request.user.pk)
-        projects_administrator_to = Project.objects.filter(administrator=user)
-        # projects_contributor_to - projects that user is contributor but not administrator
-        projects_contributor_to = None
-        return render(request, "project/home.html", {'projects_admin': projects_administrator_to,
-                                                     'projects_contributor': projects_contributor_to})
+        projects_user_is_administrator_to = Project.objects.filter(administrator=user)
+        projects_user_is_participant_to = ProjectParticipants.objects.filter(user=user)
+        projects_user_is_invited_to = ProjectParticipantsInvites.objects.filter(to_user=user)
+        return render(request, "project/home.html", {'admin_to': projects_user_is_administrator_to,
+                                                     'participant_to': projects_user_is_participant_to,
+                                                     'invited_to': projects_user_is_invited_to})
 
 
 class ProjectsCreate(View):
