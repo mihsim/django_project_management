@@ -69,9 +69,6 @@ class ProjectParticipantsInvites(models.Model):
             invite.save()
             return "Success", "Invitation successfully sent."
 
-    @classmethod
-    def accept_invite(cls):
-        pass
 
     @classmethod
     def check_participant(cls, project_id, to_user_email):
@@ -100,19 +97,8 @@ class ProjectParticipantsInvites(models.Model):
         except cls.DoesNotExist:
             return "Success", "Invitation can be sent.", to_user
 
-    @classmethod
-    def delete_invite(cls, project_id, to_user_id):
-        try:
-            project = Project.objects.get(id=project_id)
-            to_user = User.objects.get(id=to_user_id)
-            invite = cls.objects.get(project=project, to_user=to_user)
-        except (Project.DoesNotExist, User.DoesNotExist, cls.DoesNotExist):
-            return "Error", "Bad data provided!"
-        invite.delete()
-        return "Success", "Invite deleted!"
-
     def __str__(self):
-        return self.project.name
+        return f"Project: {self.project.name}. From: {self.from_user.username}. To: {self.to_user.username}."
 
 
 class Sprint(models.Model):

@@ -10,37 +10,38 @@
     </a>
     <hr>
 
-    {% if admin_to %}
+    {% if administrator_to_projects %}
         {# Prints out list of projects user is administrator to. #}
         <h3>You are administrator to:</h3>
         <ul class="list-group">
-            {% for project in admin_to %}
+            {% for project in administrator_to_projects %}
                 <a href="{% url "project:project" project.id %}" class="list-group-item list-group-item-action">{{ project }}</a>
             {% endfor %}
         </ul>
     {% endif %}
 
-    {% if participant_to %}
+    {% if participations_to_projects %}
         {# Prints out list of projects user is participating, but is not administrator to. #}
         <h3>You are contributor to:</h3>
         <ul class="list-group">
-            {% for project in participant_to %}
+            {% for participation in participations_to_projects %}
                 {# project.project.id - project instance has a foreing key field named project.#}
-                <a href="{% url "project:project" project.project.id %}" class="list-group-item list-group-item-action">{{ project }}</a>
+                <a href="{% url "project:project" participation.project.id %}" class="list-group-item list-group-item-action">{{ participation.project.name }}</a>
             {% endfor %}
         </ul>
     {% endif %}
 
-    {% if invited_to %}
+    {% if invitations_to_projects %}
         {# Prints out list of projects that user is invited to. #}
         <h3>You are invited to:</h3>
-        {% for project in invited_to %}
+        {% for invitation in invitations_to_projects %}
             <li class="list-group-item">
                 {# Using class="row" so project name and buttons could be on the same line. #}
-                <form role="form"  action="#" method="PUT" class="row">
-                    <div class="col">{{ project }}</div>
+                <form role="form"  action="{% url 'project:invitation' invitation.id 'accept' %}" method="POST" class="row">
+                    {% csrf_token %}
+                    <div class="col">{{ invitation.project.name }}</div>
                     <div class="col-auto">
-                        <button class="btn btn-outline-secondary btn-sm" type="submit" formaction="">Decline</button>
+                        <button class="btn btn-outline-secondary btn-sm" type="submit" formaction="{% url 'project:invitation' invitation.id 'decline' %}">Decline</button>
                         <button class="btn btn-outline-success btn-sm" type="submit">Accept</button>
                     </div>
                 </form>

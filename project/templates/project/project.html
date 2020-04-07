@@ -26,24 +26,26 @@
     </ul>
 
     {# If project has invited partivipants who have not accepted the inviteinvites, then they will be printed out:  #}
-    <ul class="list-group">
-        <h3>Invited to participate:</h3>
-        {% if invite_delete_result == "Error" %}
-            <div class="alert alert-danger">{{ invite_delete_message }}</div>
-        {% elif invite_delete_result == "Success" %}
-            <div class="alert alert-success">{{ invite_delete_message }}</div>
-        {% endif %}
-        {% if project_invitees %}
-            {% for project_invitee in project_invitees %}
-                <li class="list-group-item">{{ project_invitee }}</li>
-            {% endfor %}
-        {% else %}
-            <li class="list-group-item">Nobody is invited to participate.</li>
-        {% endif %}
-    </ul>
-
-    {# Button to go and search new participants #}
-    <form class="text-center" action="{% url 'project:search_participants' project.id %}" method="GET">
-        <button type="submit" class="btn btn-primary">Invite contributors</button>
-    </form>
+    {% if project.administrator ==  user %}
+        <ul class="list-group">
+            <h3>Invited to participate:</h3>
+            {% if invites_to_participate_in_project %}
+                {% for invitation in invites_to_participate_in_project %}
+                    <li class="list-group-item">
+                        <form action="{% url 'project:invitation' invitation.id 'delete' %}" method="POST" class="row">
+                            {% csrf_token %}
+                            <div class="col">{{ invitation.to_user.username }}</div>
+                            <button class="btn btn-outline-secondary btn-sm col-auto">Delete</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li class="list-group-item">Nobody is invited to participate.</li>
+            {% endif %}
+        </ul>
+        {# Button to go and search new participants #}
+        <form class="text-center" action="{% url 'project:search_participants' project.id %}" method="GET">
+            <button type="submit" class="btn btn-primary">Invite contributors</button>
+        </form>
+    {% endif %}
 {% endblock %}

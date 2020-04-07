@@ -1,8 +1,10 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.views import View
+from django.http import Http404
 from typing import List, Dict
+
 
 from .models import Project, ProjectParticipants, ProjectParticipantsInvites
 
@@ -19,9 +21,9 @@ class Projects(View):
         projects_user_is_administrator_to = Project.objects.filter(administrator=user)
         projects_user_is_participant_to = ProjectParticipants.objects.filter(user=user)
         projects_user_is_invited_to = ProjectParticipantsInvites.objects.filter(to_user=user)
-        return render(request, "project/home.html", {'admin_to': projects_user_is_administrator_to,
-                                                     'participant_to': projects_user_is_participant_to,
-                                                     'invited_to': projects_user_is_invited_to})
+        return render(request, "project/home.html", {'administrator_to_projects': projects_user_is_administrator_to,
+                                                     'participations_to_projects': projects_user_is_participant_to,
+                                                     'invitations_to_projects': projects_user_is_invited_to})
 
 
 class ProjectsCreate(View):
@@ -42,7 +44,7 @@ class ProjectView(View):
         project = Project.objects.get(id=project_id)
         content = {"project": project}
         project_participants = self.get_project_participants(project_id)
-        project_invitees = self.get_invited_to_participate(project_id)
+        project_invitees = self.get_invited_to_participate(request, project_id)
         content.update(**project_participants, **project_invitees)
         return render(request, "project/project.html", content)
 
@@ -56,13 +58,12 @@ class ProjectView(View):
         return {"project_participants": project_participants}
 
     @staticmethod
-    def get_invited_to_participate(project_id: int) -> Dict[str, List]:
+    def get_invited_to_participate(request, project_id: int) -> Dict[str, List]:
         try:
-            invites = ProjectParticipantsInvites.objects.filter(project=project_id)
-            project_invitees = [invite.to_user for invite in invites]
+            invites = ProjectParticipantsInvites.objects.filter(project=project_id, from_user=request.user.pk)
         except ProjectParticipantsInvites.DoesNotExist:
-            project_invitees = None
-        return {"project_invitees": project_invitees}
+            invites = None
+        return {"invites_to_participate_in_project": invites}
 
 
 class ProjectChangeView(View):
@@ -81,8 +82,9 @@ class ProjectChangeView(View):
         return redirect("project:project", project_id)
 
 
-class ProjectInviteView(View):
-    def get(self, request, project_id):
+class CreateInviteToProject(View):
+    @staticmethod
+    def get(request, project_id):
         email = request.GET.get('email_to_check')
         project = Project.objects.get(id=project_id)
         if not email:
@@ -100,7 +102,8 @@ class ProjectInviteView(View):
             return render(request, "project/search_participants.html", {'project': project,
                                                                         'contributor_found': contributor_found})
 
-    def post(self, request, project_id, participant_id):
+    @staticmethod
+    def post(request, project_id, participant_id):
         invite_result, invite_message = ProjectParticipantsInvites.add_invite(project_id=project_id,
                                                                               from_user_id=request.user.id,
                                                                               to_user_id=participant_id)
@@ -114,14 +117,39 @@ class ProjectInviteView(View):
             request.method = "GET"
             return render(request, "project/search_participants.html", content)
 
-    def put(self, request):
-        return HttpResponse("PUT is not implemented")
 
-    def delete(self, request, project_id, participant_id):
-        result, message = ProjectParticipantsInvites.delete_invite(project_id=project_id, to_user_id=participant_id)
-        project = Project.objects.get(id=project_id)
-        content = {'project': project,
-                   "invite_delete_result": result,
-                   "invite_delete_message": message}
+class ManageInvites(View):
+    def post(self, request, invitation_id, action):
+        """
+        :type request: HttpRequest
+        :type invitation_id: int
+        :type action: str - accept, decline, delete
+        :rtype: HttpResponse
+        """
 
-        return render(request, "project/project.html", content)
+        invitation = get_object_or_404(ProjectParticipantsInvites, pk=invitation_id)
+        # Invitee can accept and decline invite
+        # Invitor can delete invite
+        if action == 'accept' and invitation.to_user.id == request.user.id:
+            try:
+                project_participants = ProjectParticipants.objects.get(project=invitation.project)
+                project_participants.user.add(invitation.to_user)
+                invitation.delete()
+            except ProjectParticipants.DoesNotExist:
+                project_participants = ProjectParticipants.objects.create(project=invitation.project)
+                project_participants.user.add(invitation.to_user)
+                invitation.delete()
+            return redirect('project:project', project_participants.project.id)
+
+        elif action == 'decline' and invitation.to_user.id == request.user.id:
+            invitation.status = 'Declined'
+            invitation.save()
+            return redirect('project:home')
+        elif action == 'delete' and invitation.from_user.id == request.user.id:
+            invitation.delete()
+            return redirect('project:home')
+
+        # 'HttpResponse('NO')'  is met for cases where user tries to change things he is not allowed
+        # or typing 'acton' that does not exist.
+        # Not sure why but this HttpResponse('NO') is not working and returns "HTTP ERROR 405" instead
+        return HttpResponse('NO')
