@@ -20,11 +20,20 @@
     {% endif %}
 
     {# If selected project has participants, then they are printed out #}
+    {# Project administrator can remove paricipants #}
     <ul class="list-group">
         <h3>Project participants:</h3>
-        {% if project_participants %}
-            {% for project_participant in project_participants %}
-                <li class="list-group-item">{{ project_participant }}</li>
+        {% if participation.user.all %}
+            {% for user in participation.user.all %}
+                <li class="list-group-item">
+                    <form action="{% url 'project:manage_participation' participation.pk user.pk 'remove' %}" method="POST" class="row">
+                        {% csrf_token %}
+                        <div class="col">{{ user.username }}</div>
+                        {% if participation.project.administrator == request.user %}
+                        <div class="col-auto"><button type="submit" class="btn btn-outline-danger btn-sm">Remove</button></div>
+                        {% endif %}
+                    </form>
+                </li>
             {% endfor %}
         {% else %}
             <li class="list-group-item">This project has no participants</li>

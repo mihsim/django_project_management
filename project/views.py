@@ -51,11 +51,10 @@ class ProjectView(View):
     @staticmethod
     def get_project_participants(project_id: int) -> Dict[str, List]:
         try:
-            project_with_participants = ProjectParticipants.objects.get(project=project_id)
-            project_participants = project_with_participants.user.all()
+            participation = ProjectParticipants.objects.get(project=project_id)
         except ProjectParticipants.DoesNotExist:
-            project_participants = None
-        return {"project_participants": project_participants}
+            participation = None
+        return {"participation": participation}
 
     @staticmethod
     def get_invited_to_participate(request, project_id: int) -> Dict[str, List]:
@@ -125,7 +124,7 @@ class CreateInviteToProject(View):
             return render(request, "project/search_participants.html", content)
 
 
-class ManageInvites(View):
+class ManageInvite(View):
     def post(self, request, invitation_id, action):
         """
         :type request: HttpRequest
@@ -155,8 +154,19 @@ class ManageInvites(View):
         elif action == 'delete' and invitation.from_user.id == request.user.id:
             invitation.delete()
             return redirect('project:home')
-
+        
         # 'HttpResponse('NO')'  is met for cases where user tries to change things he is not allowed
         # or typing 'acton' that does not exist.
-        # Not sure why but this HttpResponse('NO') is not working and returns "HTTP ERROR 405" instead
+        # FIXME HttpResponse('NO') is not working and returns "HTTP ERROR 405" instead.
         return HttpResponse('NO')
+
+
+class ManageParticipation(View):
+    @staticmethod
+    def post(request, participation_id, user_id, action):
+        participation = get_object_or_404(ProjectParticipants, pk=participation_id)
+        user = get_object_or_404(User, pk=user_id)
+        if action == "remove" and participation.project.administrator == request.user:
+            participation.user.remove(user)
+        return redirect('project:project', participation.project.pk)
+    
