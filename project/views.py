@@ -65,6 +65,13 @@ class ProjectView(View):
             invites = None
         return {"invites_to_participate_in_project": invites}
 
+    @staticmethod
+    def post(request, project_id: int, action: str):
+        project = get_object_or_404(Project, pk=project_id)
+        if action == "delete" and request.user == project.administrator:
+            project.delete()
+        return redirect('project:home')
+
 
 class ProjectChangeView(View):
     def get(self, request, project_id):

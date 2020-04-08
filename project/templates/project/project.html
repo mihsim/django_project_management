@@ -9,9 +9,15 @@
         <h3>Project description:</h3>
         <li class="list-group-item">{{ project.description }}</li>
     </ul>
-    <form class="text-center" action="{% url 'project:change' project.id %}" method="GET">
-        <button type="submit" class="btn btn-primary">Change project</button>
-    </form>
+
+    {# Buttons to 'change' and 'delete' project may be visible only to project administrator. #}
+    {% if project.administrator == user %}
+        <form class="text-center" action="{% url 'project:change' project.id %}" method="GET">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Change project</button>
+            <button type="submit" formaction="{% url 'project:delete' project.pk 'delete' %}" formmethod="POST" class="btn btn-outline-danger">Delete Project</button>
+        </form>
+    {% endif %}
 
     {# If selected project has participants, then they are printed out #}
     <ul class="list-group">
