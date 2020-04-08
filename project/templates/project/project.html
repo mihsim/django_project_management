@@ -10,7 +10,8 @@
         <li class="list-group-item">{{ project.description }}</li>
     </ul>
 
-    {# Buttons to 'change' and 'delete' project may be visible only to project administrator. #}
+    {# Buttons to 'change' and 'delete' project #}
+    {# Visible only to project administrator #}
     {% if project.administrator == user %}
         <form class="text-center" action="{% url 'project:change' project.id %}" method="GET">
             {% csrf_token %}

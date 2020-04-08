@@ -2,7 +2,6 @@ from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.views import View
-from django.http import Http404
 from typing import List, Dict
 
 
@@ -69,7 +68,7 @@ class ProjectView(View):
         project = get_object_or_404(Project, pk=project_id)
         if action == "delete" and request.user == project.administrator:
             project.delete()
-        return redirect('project:home')
+            return redirect('project:home')
 
 
 class ProjectChangeView(View):
@@ -169,4 +168,3 @@ class ManageParticipation(View):
         if action == "remove" and participation.project.administrator == request.user:
             participation.user.remove(user)
         return redirect('project:project', participation.project.pk)
-    
