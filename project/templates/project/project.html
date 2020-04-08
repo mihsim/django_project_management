@@ -19,6 +19,7 @@
         </form>
     {% endif %}
 
+
     {# If selected project has participants, then they are printed out #}
     {# Project administrator can remove paricipants #}
     <ul class="list-group">
@@ -40,7 +41,9 @@
         {% endif %}
     </ul>
 
-    {# If project has invited partivipants who have not accepted the inviteinvites, then they will be printed out:  #}
+
+    {# If project has invited participants who have not accepted the inviteinvites, then they will be printed out:  #}
+    {# Visible only to project administrator #}
     {% if project.administrator ==  user %}
         <ul class="list-group">
             <h3>Invited to participate:</h3>
@@ -50,7 +53,12 @@
                         <form action="{% url 'project:invitation' invitation.id 'delete' %}" method="POST" class="row">
                             {% csrf_token %}
                             <div class="col">{{ invitation.to_user.username }}</div>
-                            <button class="btn btn-outline-secondary btn-sm col-auto">Delete</button>
+                            {% if invitation.status == 'Waiting' %}
+                                <button class="btn btn-outline-warning btn.sm col-auto" disabled>{{ invitation.status }}</button>
+                            {% elif invitation.status == 'Declined'%}
+                                 <button class="btn btn-outline-secondary btn.sm col-auto" disabled>{{ invitation.status }}</button>
+                            {% endif %}
+                            <button class="btn btn-outline-danger btn-sm col-auto">Delete</button>
                         </form>
                     </li>
                 {% endfor %}
