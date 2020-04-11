@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'project',
     'users',
+    'home',
 ]
 
 MIDDLEWARE = [
@@ -123,10 +124,9 @@ USE_TZ = True
 # All static files are collected to here if you run "python manage.py collectstatic"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-# Location for static files that are not for specific project
+# Location of static files in different apps:
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static_unrelated")
+    os.path.join(BASE_DIR, "home/static/base/css/")
 ]
-
 
 STATIC_URL = "/static/"

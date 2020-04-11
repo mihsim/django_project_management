@@ -1,0 +1,22 @@
+{% extends 'project/base_with_sidebar.html' %}
+
+{% block content_title %}
+    Create a new project
+{% endblock %}
+
+{% block content_body %}
+    <form action="{% url 'project:create' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="exampleInputPassword1">Project name</label>
+            <input type="text" class="form-control" id="exampleInputPassword1" name="project_name" required>
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Project description</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="project_description"></textarea>
+        </div>
+        <div class="text-center">
+            <button class="btn btn-primary" type="submit">Save</button>
+        </div>
+    </form>
+{% endblock %}
