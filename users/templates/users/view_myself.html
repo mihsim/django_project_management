@@ -1,0 +1,24 @@
+{% extends 'users/base_with_sidebar.html' %}
+
+{% block content_title %}
+    View Data
+{% endblock %}
+
+{% block content_body %}
+    <table class="table">
+        <tbody>
+            <tr>
+                <th scope="row">Username</th>
+                <td>{{ request.user.username }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Email</th>
+                <td>{{ request.user.email }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Date joined</th>
+                <td>{{ date_registered }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

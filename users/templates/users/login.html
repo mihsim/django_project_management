@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container display-4 text-center my-auto">
+    <div class="container display-4 text-center my-auto" id="title_font">
         Log In
     </div>
     <form action="{% url 'users:login' %}" method="POST" class="container text-center">

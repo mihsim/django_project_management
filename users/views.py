@@ -24,18 +24,23 @@ def account_create(request):
         return render(request, 'users/create.html')
 
 
+def view_myself(request):
+    user = User.objects.get(pk=request.user.pk)
+    return render(request, 'users/view_myself.html', {'date_registered': user.date_joined})
+
+
 @login_required
-def account_modify(request):
+def change_username_email(request):
     if request.method == "GET":
-        return render(request, "users/account_modify.html")
+        return render(request, "users/change.html")
     else:
         if request.user.check_password(request.POST['password']):
             request.user.username = request.POST['username']
             request.user.email = request.POST['email']
             request.user.save()
-            return render(request, "users/account_modify.html", {'account_modification_success': 'Your data was successfully updated"'})
+            return render(request, "users/change.html", {'account_modification_success': 'Your data was successfully updated"'})
         else:
-            return render(request, "users/account_modify.html", {'account_modify_error': 'Wrong password!'})
+            return render(request, "users/change.html", {'account_modify_error': 'Wrong password!'})
 
 
 @login_required
@@ -46,13 +51,13 @@ def change_password(request):
                 request.user.set_password(request.POST['new_password1'])
                 request.user.save()
                 update_session_auth_hash(request, request.user)
-                return render(request, 'users/account_modify.html', {'password_changed': 'Password change successful!'})
+                return render(request, 'users/change.html', {'password_changed': 'Password change successful!'})
             else:
-                return render(request, 'users/account_modify.html', {'password_change_error': 'New passwords did not match!'})
+                return render(request, 'users/change.html', {'password_change_error': 'New passwords did not match!'})
         else:
-            return render(request, 'users/account_modify.html', {'password_change_error': 'Current password was wrong!'})
+            return render(request, 'users/change.html', {'password_change_error': 'Current password was wrong!'})
     else:
-        return redirect("users:modify")
+        return redirect("users:change")
 
 
 def account_login(request):
@@ -76,6 +81,10 @@ def account_logout(request):
 
 @login_required
 def account_delete(request):
+    if request.method == 'GET':
+        warning_message = "Deleted account can not be restored!"
+        return render(request, 'users/delete.html', {'warning_message': warning_message})
+
     if request.method == 'POST':
         user = User.objects.get(username=request.user.username)
         user.delete()
