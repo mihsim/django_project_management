@@ -67,7 +67,7 @@ def account_login(request):
         user = authenticate(username=request.POST['username'], password=request.POST['password'])
         if user:
             login(request, user)
-            return redirect("project:home")
+            return redirect("projects:overview")
         else:
             return render(request, 'users/login.html', {'error': 'Username and password did not match!'})
 

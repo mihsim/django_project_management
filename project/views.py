@@ -4,38 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views import View
 from typing import List, Dict
 
-
 from .models import Project, ProjectParticipants, ProjectParticipantsInvites
-
-
-class Projects(View):
-    """
-    Projects page. (All projects)
-    - Displays list of all projects user is administrator to.
-    - Displays list of all projects user is contributor to.
-    - Has button "Create new project" which leads to next page.
-    """
-    def get(self, request):
-        user = User.objects.get(id=request.user.pk)
-        projects_user_is_administrator_to = Project.objects.filter(administrator=user)
-        projects_user_is_participant_to = ProjectParticipants.objects.filter(user=user)
-        projects_user_is_invited_to = ProjectParticipantsInvites.objects.filter(to_user=user)
-        return render(request, "project/home.html", {'administrator_to_projects': projects_user_is_administrator_to,
-                                                     'participations_to_projects': projects_user_is_participant_to,
-                                                     'invitations_to_projects': projects_user_is_invited_to})
-
-
-class ProjectsCreate(View):
-    def get(self, request):
-        return render(request, "project/create.html")
-
-    def post(self, request):
-        project = Project.objects.create(name=request.POST["project_name"],
-                                         description=request.POST["project_description"],
-                                         administrator=User.objects.get(id=request.user.pk)
-                                         )
-        project.save()
-        return redirect('project:home')
 
 
 class ProjectView(View):
@@ -68,7 +37,7 @@ class ProjectView(View):
         project = get_object_or_404(Project, pk=project_id)
         if action == "delete" and request.user == project.administrator:
             project.delete()
-            return redirect('project:home')
+            return redirect('projects:overview')
 
 
 class ProjectChangeView(View):
@@ -149,10 +118,10 @@ class ManageInvite(View):
         elif action == 'decline' and invitation.to_user.id == request.user.id:
             invitation.status = 'Declined'
             invitation.save()
-            return redirect('project:home')
+            return redirect('projects:overview')
         elif action == 'delete' and invitation.from_user.id == request.user.id:
             invitation.delete()
-            return redirect('project:home')
+            return redirect('projects:overview')
         
         # 'HttpResponse('NO')'  is met for cases where user tries to change things he is not allowed
         # or typing 'acton' that does not exist.
