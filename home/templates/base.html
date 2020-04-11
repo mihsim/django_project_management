@@ -2,87 +2,72 @@
 <html lang="en">
 {% load static %}
 <head>
+    <title>Zen{% block title %}{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <meta charset="UTF-8">
-    <title>Title</title>
+
+    {# Link to bootstrap #}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    {# Link to font used in title class #}
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
 </head>
 
 <body class="container">
-    <!--Header-->
+    {# Header #}
     <header class="navbar navbar-expand navbar-dark bg-dark">
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item active">
-                <a class="navbar-brand" href="#">Hidden brand</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </li>
-        </ul>
         {% if user.is_authenticated %}
-            <!--Modify account-->
+            {# Left sife of navbar #}
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="navbar-brand" href="#">Zen Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:modify' %}">
+                        <svg class="bi bi-person-fill" width="32" height="32" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+                        Account
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+
+            {# Left sife of navbar #}
             <form class="form-inline my-2 my-lg-0" action="{% url 'users:modify' %}" method="GET">
                 <button type="submit" class="btn btn-light">{{ user.username }}</button>
             </form>
-            <!--Logout-->
             <form class="form-inline my-2 my-lg-0" action="{% url 'users:logout' %}" method="POST">
                 {% csrf_token %}
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log Out</button>
             </form>
         {% else %}
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="navbar-brand" href="#">Zen Projects</a>
+                </li>
+            </ul>
             <!--Signup-->
             <form class="form-inline my-2 my-lg-0" action="{% url 'users:create' %}" method="GET">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign Up</button>
             </form>
             <!--Login-->
-            <form class="form-inline my-2 my-lg-0" action="{% url 'users:login' %}" method="GET">
+            <form class="form-inline my-2 my-lg-0" action="{% url 'home:home' %}" method="GET">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log In</button>
             </form>
         {% endif %}
     </header>
-    <!--Section-->
-    <section class="row top_to_bottom">
-        <!-- SIDEBAR -->
-        <nav id="nav_sidebar">
-            <div class="sidebar-sticky" id="sidebar">
 
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'users:modify' %}">
-                            <svg class="bi bi-person-fill" width="32" height="32" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
-                            Account
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'project:home' %}">
-                            <svg class="bi bi-briefcase" width="32" height="32" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M0 12.5A1.5 1.5 0 001.5 14h13a1.5 1.5 0 001.5-1.5v-6h-1v6a.5.5 0 01-.5.5h-13a.5.5 0 01-.5-.5v-6H0v6z" clip-rule="evenodd"/>
-                                <path fill-rule="evenodd" d="M0 4.5A1.5 1.5 0 011.5 3h13A1.5 1.5 0 0116 4.5v2.384l-7.614 2.03a1.5 1.5 0 01-.772 0L0 6.884V4.5zM1.5 4a.5.5 0 00-.5.5v1.616l6.871 1.832a.5.5 0 00.258 0L15 6.116V4.5a.5.5 0 00-.5-.5h-13zM5 2.5A1.5 1.5 0 016.5 1h3A1.5 1.5 0 0111 2.5V3h-1v-.5a.5.5 0 00-.5-.5h-3a.5.5 0 00-.5.5V3H5v-.5z" clip-rule="evenodd"/>
-                            </svg>
-                            Projects
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <!--Specific-->
-        <div class="col" >
-            <div class="display-4 text-center">
-            {% block content_title %}
-            {% endblock %}
-            </div>
-            <hr class="my-4">
-            {% block content_body %}
-            {% endblock %}
-        </div>
+    {# Section #}
+    <section class="row top_to_bottom">
+        {% block content %}
+        {% endblock %}
     </section>
-    <!--Footer-->
+
+    {# Footer #}
     <footer class="page-footer font-small bg-light container">
           <div class="footer-copyright text-center">
               © 2020 Copyright:<br>

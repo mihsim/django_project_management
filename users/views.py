@@ -7,9 +7,12 @@ from django.db import IntegrityError
 
 def account_create(request):
     if request.method == "POST":
+        if request.POST['password1'] != request.POST['password2']:
+            return render(request, 'users/create.html',
+                          {'error_message': 'Passwords did not match!'})
         try:
             user = User.objects.create_user(username=request.POST["username"],
-                                            password=request.POST["password"],
+                                            password=request.POST["password1"],
                                             email=request.POST["email"],
                                             )
             user.save()
@@ -59,7 +62,7 @@ def account_login(request):
         user = authenticate(username=request.POST['username'], password=request.POST['password'])
         if user:
             login(request, user)
-            return redirect("home:home")
+            return redirect("project:home")
         else:
             return render(request, 'users/login.html', {'error': 'Username and password did not match!'})
 
