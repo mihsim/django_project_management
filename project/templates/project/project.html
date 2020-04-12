@@ -10,66 +10,8 @@
         <li class="list-group-item">{{ project.description }}</li>
     </ul>
 
-    {# Buttons to 'change' and 'delete' project #}
-    {# Visible only to project administrator #}
-    {% if project.administrator == user %}
-        <form class="text-center" action="{% url 'project:change' project.id %}" method="GET">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary">Change project</button>
-            <button type="submit" formaction="{% url 'project:delete' project.pk 'delete' %}" formmethod="POST" class="btn btn-outline-danger">Delete Project</button>
-        </form>
-    {% endif %}
 
 
-    {# If selected project has participants, then they are printed out #}
-    {# Project administrator can remove paricipants #}
-    <ul class="list-group">
-        <h3>Project participants:</h3>
-        {% if participation.user.all %}
-            {% for user in participation.user.all %}
-                <li class="list-group-item">
-                    <form action="{% url 'project:manage_participation' participation.pk user.pk 'remove' %}" method="POST" class="row">
-                        {% csrf_token %}
-                        <div class="col">{{ user.username }}</div>
-                        {% if participation.project.administrator == request.user %}
-                        <div class="col-auto"><button type="submit" class="btn btn-outline-danger btn-sm">Remove</button></div>
-                        {% endif %}
-                    </form>
-                </li>
-            {% endfor %}
-        {% else %}
-            <li class="list-group-item">This project has no participants</li>
-        {% endif %}
-    </ul>
 
 
-    {# If project has invited participants who have not accepted the inviteinvites, then they will be printed out:  #}
-    {# Visible only to project administrator #}
-    {% if project.administrator ==  user %}
-        <ul class="list-group">
-            <h3>Invited to participate:</h3>
-            {% if invites_to_participate_in_project %}
-                {% for invitation in invites_to_participate_in_project %}
-                    <li class="list-group-item">
-                        <form action="{% url 'project:invitation' invitation.id 'delete' %}" method="POST" class="row">
-                            {% csrf_token %}
-                            <div class="col">{{ invitation.to_user.username }}</div>
-                            {% if invitation.status == 'Waiting' %}
-                                <button class="btn btn-outline-warning btn.sm col-auto" disabled>{{ invitation.status }}</button>
-                            {% elif invitation.status == 'Declined'%}
-                                 <button class="btn btn-outline-secondary btn.sm col-auto" disabled>{{ invitation.status }}</button>
-                            {% endif %}
-                            <button class="btn btn-outline-danger btn-sm col-auto">Delete</button>
-                        </form>
-                    </li>
-                {% endfor %}
-            {% else %}
-                <li class="list-group-item">Nobody is invited to participate.</li>
-            {% endif %}
-        </ul>
-        {# Button to go and search new participants #}
-        <form class="text-center" action="{% url 'project:search_participants' project.id %}" method="GET">
-            <button type="submit" class="btn btn-primary">Invite contributors</button>
-        </form>
-    {% endif %}
 {% endblock %}

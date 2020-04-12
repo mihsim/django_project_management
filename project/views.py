@@ -11,10 +11,16 @@ class ProjectView(View):
     def get(self, request, project_id):
         project = Project.objects.get(id=project_id)
         content = {"project": project}
-        project_participants = self.get_project_participants(project_id)
-        project_invitees = self.get_invited_to_participate(request, project_id)
-        content.update(**project_participants, **project_invitees)
         return render(request, "project/project.html", content)
+
+    @classmethod
+    def participants(cls, request, project_id):
+        project = Project.objects.get(id=project_id)
+        content = {"project": project}
+        project_participants = cls.get_project_participants(project_id)
+        project_invitees = cls.get_invited_to_participate(request, project_id)
+        content.update(**project_participants, **project_invitees)
+        return render(request, "project/participants.html", content)
 
     @staticmethod
     def get_project_participants(project_id: int) -> Dict[str, List]:
@@ -33,19 +39,24 @@ class ProjectView(View):
         return {"invites_to_participate_in_project": invites}
 
     @staticmethod
-    def post(request, project_id: int, action: str):
+    def delete(request, project_id):
         project = get_object_or_404(Project, pk=project_id)
-        if action == "delete" and request.user == project.administrator:
+        if request.method == "POST" and request.user == project.administrator:
             project.delete()
             return redirect('projects:overview')
+        elif request.method == "GET":
+            content = {'project': project,
+                       'warning_message': 'Deleted project can not be restored!'}
+            return render(request, 'project/delete.html', content)
+        else:
+            # If request.method was 'POST' but user was not administrator for project:
+            return redirect('home:home')
 
 
 class ProjectChangeView(View):
     def get(self, request, project_id):
-        project = Project.objects.filter(id=project_id).first()
-        content = {"project_id": project.id,
-                   "project_name": project.name,
-                   "project_description": project.description}
+        project = Project.objects.get(pk=project_id)
+        content = {"project": project}
         return render(request, "project/change.html", content)
 
     def post(self, request, project_id):

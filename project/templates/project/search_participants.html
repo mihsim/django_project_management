@@ -2,7 +2,7 @@
 
 
 {% block content_title %}
-    {{ project.name }}
+    Search users
 {% endblock %}
 
 
@@ -39,7 +39,6 @@
                 </li>
             </ul>
             <div class="text-center">
-                <button class="btn btn-secondary" formaction="{% url 'project:search_participants' project.id %}" formmethod="GET">Search again</button>
                 <button class="btn btn-primary">Send invite</button>
             </div>
         </form>
@@ -49,8 +48,5 @@
     {% if contributor_not_found %}
         <div class="alert alert-danger" role="alert">{{ contributor_not_found }}</div>
     {% endif %}
-    <form class="text-center" action="{% url 'project:project' project.id %}" method="GET">
-        <button class="btn btn-secondary" >Back to project.</button>
-    </form>
 
 {% endblock %}
