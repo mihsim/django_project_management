@@ -101,16 +101,6 @@ class ProjectParticipantsInvites(models.Model):
         return f"Project: {self.project.name}. From: {self.from_user.username}. To: {self.to_user.username}."
 
 
-class Sprint(models.Model):
-    name = models.CharField(max_length=100)
-    date_from = models.DateField()
-    date_to = models.DateField()
-    planned_story_points = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.name
-
-
 class Task(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
