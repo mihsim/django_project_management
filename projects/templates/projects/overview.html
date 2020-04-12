@@ -1,14 +1,10 @@
-{% extends 'project/base_with_sidebar.html' %}
+{% extends 'projects/base_with_sidebar.html' %}
 
 {% block content_title %}
-    Project page
+    Projects
 {% endblock %}
 
 {% block content_body %}
-    <a href="{% url 'project:create' %}" >
-        <button class="btn btn-primary">Create new project</button>
-    </a>
-    <hr>
 
     {# Prints out list of projects user is administrator to. #}
     {% if administrator_to_projects %}
