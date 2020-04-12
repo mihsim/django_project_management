@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 progress = (
     ('1', 'Backlog'),
     ('2', 'To do'),
@@ -101,13 +102,4 @@ class ProjectParticipantsInvites(models.Model):
         return f"Project: {self.project.name}. From: {self.from_user.username}. To: {self.to_user.username}."
 
 
-class Task(models.Model):
-    name = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
-    sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE)
-    story_points = models.CharField(max_length=200)
-    assigned_person = models.ManyToManyField(User)
-    task_name = models.CharField(max_length=80)
 
-    def __str__(self):
-        return self.name
