@@ -1,15 +1,30 @@
 version: '3'
 
 services:
-  db:
-    image: postgres
   web:
-    container_name: django_project_management
+    container_name: project_management
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
       - "8000:8000"
     depends_on:
       - db
+    networks:
+      - net
+
+  db:
+    image: postgres:12.2
+    restart: always
+    environment:
+      - POSTGRES_DB=project_management
+      - POSTGRES_USER=Rigel
+      - POSTGRES_PASSWORD=Betelgeuse
+    networks:
+      net:
+        aliases:
+        - net_alias
+
+networks:
+  net:
