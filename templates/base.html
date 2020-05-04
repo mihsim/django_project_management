@@ -12,7 +12,7 @@
 
 <body class="container">
     {# Header #}
-    <header class="navbar navbar-expand navbar-dark bg-dark">
+    <header class="navbar navbar-expand navbar-dark">
         {% if user.is_authenticated %}
             {# Left sife of navbar #}
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -53,7 +53,7 @@
             <form class="form-inline my-2 my-lg-0" action="{% url 'users:create' %}" method="GET">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign Up</button>
             </form>
-            <form class="form-inline my-2 my-lg-0" action="{% url 'home:home' %}" method="GET">
+            <form class="form-inline my-2 my-lg-0" action="{% url 'users:login' %}" method="GET">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Log In</button>
             </form>
         {% endif %}
@@ -66,12 +66,10 @@
     </section>
 
     {# Footer #}
-    <footer class="page-footer font-small bg-light container">
+    <footer class="page-footer font-small container">
           <div class="footer-copyright text-center">
-              © 2020 Copyright:<br>
               <a href="https://github.com/mihsim" class="text-decoration-none text-reset">mihsim</a>
-              &&
-              <a href="https://github.com/he777" class="text-decoration-none text-reset">he777</a>
+              &copy; 2020
         </div>
     </footer>
    </body>

@@ -1,0 +1,21 @@
+{% extends 'base_with_sidebars/base_with_sprint_sidebar.html' %}
+{% block title %}|Sprint{% endblock %}
+
+{% block content_title %}
+    Sprints
+{% endblock %}
+
+{% block content_body %}
+    {% if not sprints %}
+        <p>This project does not have any sprints. Project administrator can create them.</p>
+    {% endif %}
+    {% for sprint in sprints %}
+        <ul>
+            <li>{{ sprint.name }}</li>
+            <li>{{ sprint.date_from }}</li>
+            <li>{{ sprint.date_to }}</li>
+            <li>{{ sprint.planned_story_points }}</li>
+        </ul>
+    {% endfor %}
+
+{% endblock %}

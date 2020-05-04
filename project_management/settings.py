@@ -37,12 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'project',
-    'users',
-    'home',
-    'projects',
-    'sprints',
-    'tasks',
+    #
+    'project.apps.ProjectConfig',
+    'users.apps.UsersConfig',
+    'home.apps.HomeConfig',
+    'projects.apps.ProjectsConfig',
+    'sprints.apps.SprintsConfig',
+    'tasks.apps.TasksConfig',
 ]
 
 MIDDLEWARE = [
@@ -133,7 +134,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Location of static files in different apps:
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "home/static/base/css/")
+    os.path.join(BASE_DIR, "home/static/base/css/"),
+    os.path.join(BASE_DIR, "sprints/static/sprints/img/"),
 ]
 
 STATIC_URL = "/static/"
+
+# Used with decorator: @login_required(login_url=LOGIN_REDIRECT_URL)
+LOGIN_REDIRECT_URL = "/account/login/"

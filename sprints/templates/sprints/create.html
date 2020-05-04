@@ -1,0 +1,19 @@
+{% extends 'base_with_sidebars/base_with_sprint_sidebar.html' %}
+
+{% block content_title %}
+    New sprint
+{% endblock %}
+
+{% block content_body %}
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <form id="sprint_create_form" action="{% url 'sprints:create' project.pk %}" method="post">
+        {% csrf_token %}
+        <label for="start_date">Start</label>
+        <input type="date" id="start_date" name="start_date">
+        <label for="end_date">End</label>
+        <input type="date" id="end_date" name="end_date">
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}
