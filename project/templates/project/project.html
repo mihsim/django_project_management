@@ -1,4 +1,4 @@
-{% extends 'project/base_with_sidebar.html' %}
+{% extends 'base_with_sidebars/base_with_project_sidebar.html' %}
 
 {% block content_title %}
     {{ project.name }}
@@ -9,9 +9,4 @@
         <h3>Project description:</h3>
         <li class="list-group-item">{{ project.description }}</li>
     </ul>
-
-
-
-
-
 {% endblock %}

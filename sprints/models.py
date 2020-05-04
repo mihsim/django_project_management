@@ -8,7 +8,7 @@ class Sprint(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     date_from = models.DateField()
     date_to = models.DateField()
-    planned_story_points = models.CharField(max_length=200)
+    planned_story_points = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
