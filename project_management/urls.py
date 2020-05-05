@@ -23,6 +23,6 @@ urlpatterns = [
     path('account/', include('users.urls')),
     path('project/', include('project.urls')),
     path('projects/', include('projects.urls')),
-    path('projects/<int:project_pk>/sprints/', include('sprints.urls'))
-
+    path('project/<int:project_pk>/sprints/', include('sprints.urls')),
+    path('project/<int:project_pk>/tasks/', include('tasks.urls')),
 ]

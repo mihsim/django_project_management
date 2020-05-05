@@ -32,4 +32,10 @@ class Create(View):
                                          administrator=User.objects.get(id=request.user.pk)
                                          )
         project.save()
+
+        # Project administrator must be added as project participant, so when creating tasks,
+        # it would be possible to select project administrator as assignee.
+        project_participants = ProjectParticipants.objects.create(project=project)
+        project_participants.user.add(project.administrator)
+
         return redirect('projects:overview')
