@@ -2,19 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-progress = (
-    ('1', 'Backlog'),
-    ('2', 'To do'),
-    ('3', 'In Progress'),
-    ('4', 'QA'),
-    ('5', 'Done')
-)
-
-weight = (
-    ('1', '2', '3', '4', '5')
-)
-
-
 class Project(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField(blank=True)
