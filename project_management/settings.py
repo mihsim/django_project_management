@@ -132,10 +132,8 @@ USE_TZ = True
 # All static files are collected to here if you run "python manage.py collectstatic"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-# Location of static files in different apps:
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "home/static/base/css/"),
-    os.path.join(BASE_DIR, "sprints/static/sprints/img/"),
+    os.path.join(BASE_DIR, "home/static/"),
     os.path.join(BASE_DIR, 'tasks/static/'),
 ]
 
