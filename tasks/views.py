@@ -11,9 +11,32 @@ from .forms import TaskCreateForm
 
 def tasks_all(request, project_pk):
     context = {}
+
     project = get_object_or_404(Project, pk=project_pk)
-    tasks = Task.objects.filter(project=project)
     context['project'] = project
+
+    tasks = Task.objects.filter(project=project)
+    # tasks_without_sprint = [task for task in tasks if task.sprint is None]
+    # context['tasks_without_sprint'] = tasks_without_sprint
+    tasks_sorted_by_sprints = {}
+    for task in tasks:
+
+        # Tasks that are not assigned to any sprint
+        if not task.sprint:
+            try:
+                tasks_sorted_by_sprints['tasks_without_sprint'].append(task)
+            except KeyError:
+                tasks_sorted_by_sprints['tasks_without_sprint'] = [task, ]
+            continue
+
+        # Tasks that are signed to a sprint
+        try:
+            tasks_sorted_by_sprints[task.sprint].append(task)
+        except KeyError:
+            tasks_sorted_by_sprints[task.sprint] = [task, ]
+
+    context['tasks_sorted_by_sprints'] = tasks_sorted_by_sprints
+
     return render(request, "tasks/all_tasks.html", context)
 
 
