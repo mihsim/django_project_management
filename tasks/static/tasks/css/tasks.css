@@ -1,0 +1,51 @@
+/* Styles in here are used in tasks_all view */
+
+.section_title{
+    font-size: 1.2rem;
+    padding: 0 0 0.5rem 1rem;
+    margin: 0;
+}
+
+.grid_tasks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 17rem);
+    grid-gap: 0.25rem;
+    padding: 0;
+    margin: 0;
+}
+
+.grid_tasks .grid_task {
+    display: grid;
+    grid-template-areas:
+                'task_name name_value name_value'
+                'task_name name_value name_value'
+                'progress_name progress_value progress_value'
+                'priority_name priority_value priority_value';
+
+    font-family: "Courier New", Courier, monospace;
+    color: #333;
+    border: #D2C8EE 1px dashed;
+    background: #f4f4f4;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    height: 5rem;
+}
+
+.grid_tasks .grid_task p {
+    padding: 0;
+    margin: 0;
+}
+.grid_tasks .grid_task .name {
+    padding-right: 0.5rem;
+}
+
+.task_name { grid-area: task_name; }
+.name_value {
+    grid-area: name_value;
+    height: 2rem;
+    overflow: hidden;
+}
+.progress_name { grid-area: progress_name; }
+.progress_value { grid-area: progress_value; }
+.priority_name { grid-area: priority_name; }
+.priority_value { grid-area: priority_value; }

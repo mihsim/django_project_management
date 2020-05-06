@@ -5,11 +5,39 @@ from django.forms import ModelChoiceField
 
 from project.models import Project, ProjectParticipants
 from sprints.models import Sprint
+from .models import Task
 from .forms import TaskCreateForm
 
 
 def tasks_all(request, project_pk):
-    return HttpResponse("Here will be all created tasks.")
+    context = {}
+
+    project = get_object_or_404(Project, pk=project_pk)
+    context['project'] = project
+
+    tasks = Task.objects.filter(project=project)
+    # tasks_without_sprint = [task for task in tasks if task.sprint is None]
+    # context['tasks_without_sprint'] = tasks_without_sprint
+    tasks_sorted_by_sprints = {}
+    for task in tasks:
+
+        # Tasks that are not assigned to any sprint
+        if not task.sprint:
+            try:
+                tasks_sorted_by_sprints['tasks_without_sprint'].append(task)
+            except KeyError:
+                tasks_sorted_by_sprints['tasks_without_sprint'] = [task, ]
+            continue
+
+        # Tasks that are signed to a sprint
+        try:
+            tasks_sorted_by_sprints[task.sprint].append(task)
+        except KeyError:
+            tasks_sorted_by_sprints[task.sprint] = [task, ]
+
+    context['tasks_sorted_by_sprints'] = tasks_sorted_by_sprints
+
+    return render(request, "tasks/all_tasks.html", context)
 
 
 def create_view(request, project_pk):
@@ -28,7 +56,11 @@ def create_view(request, project_pk):
     form.fields["sprint"] = ModelChoiceField(queryset=Sprint.objects.filter(project=project), required=False)
 
     if form.is_valid():
-        form.save()
+        # As task is created under specific project,
+        # 'ForeignKey(Project)' is excluded from 'form.fields', and is added here.
+        task_object = form.save(commit=False)
+        task_object.project = project
+        task_object.save()
         return redirect("tasks:all", project.pk)
 
     context = {'form': form, 'project': project, 'sprints': sprints}

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from sprints.models import Sprint
+from project.models import Project
 
 
 class Task(models.Model):
@@ -23,6 +24,7 @@ class Task(models.Model):
     priority = models.IntegerField(choices=Priority.choices, default=1)
     progress = models.CharField(choices=Progress.choices, max_length=12, default='Backlog')
     story_points = models.IntegerField(null=True, blank=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False, blank=True)
     sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE, null=True, blank=True)
     assignee = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True, blank=True)
 

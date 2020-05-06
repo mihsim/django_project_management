@@ -1,0 +1,42 @@
+{% extends 'base_with_sidebars/base_with_project_sidebar.html' %}
+
+
+{% block stylesheet %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'tasks/css/tasks.css' %}" />
+{% endblock %}
+
+
+{% block content_title %}
+    Tasks
+{% endblock %}
+
+
+{% block  content_body %}
+    {% if tasks_sorted_by_sprints %}
+        {% for sprint, tasks in tasks_sorted_by_sprints.items %}
+
+            {% if sprint == 'tasks_without_sprint' %}
+                <p class="section_title">Tasks without sprint</p>
+            {% else %}
+                <p class="section_title">{{ sprint }}</p>
+            {% endif %}
+
+            <section class="grid_tasks">
+                {% for task in tasks %}
+                    <div class="grid_task">
+                        <p class="task_name name">Name:</p>
+                        <p class="name_value">{{ task.name|truncatechars:35 }}</p>
+                        <p class="progress_name name">Progress:</p>
+                        <p class="progress_value">{{ task.progress }}</p>
+                        <p class="priority_name name">Priority:</p>
+                        <p class="priority_value">{{ task.priority }}</p>
+                    </div>
+                {% endfor %}
+            </section>
+
+        {% endfor %}
+    {% else %}
+        <p class="section_title">This project does not have any tasks.</p>
+    {% endif %}
+{% endblock %}
