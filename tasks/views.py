@@ -5,11 +5,16 @@ from django.forms import ModelChoiceField
 
 from project.models import Project, ProjectParticipants
 from sprints.models import Sprint
+from .models import Task
 from .forms import TaskCreateForm
 
 
 def tasks_all(request, project_pk):
-    return HttpResponse("Here will be all created tasks.")
+    context = {}
+    project = get_object_or_404(Project, pk=project_pk)
+    tasks = Task.objects.filter(project=project)
+    context['project'] = project
+    return render(request, "tasks/all_tasks.html", context)
 
 
 def create_view(request, project_pk):
@@ -28,7 +33,11 @@ def create_view(request, project_pk):
     form.fields["sprint"] = ModelChoiceField(queryset=Sprint.objects.filter(project=project), required=False)
 
     if form.is_valid():
-        form.save()
+        # As task is created under specific project,
+        # 'ForeignKey(Project)' is excluded from 'form.fields', and is added here.
+        task_object = form.save(commit=False)
+        task_object.project = project
+        task_object.save()
         return redirect("tasks:all", project.pk)
 
     context = {'form': form, 'project': project, 'sprints': sprints}
