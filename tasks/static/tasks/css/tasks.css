@@ -24,11 +24,21 @@
 
     font-family: "Courier New", Courier, monospace;
     color: #333;
-    border: #D2C8EE 1px dashed;
+    border: #D2C8EE 1px solid;
     background: #F5F1FF;
     font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
     height: 5rem;
+    border-radius: 5px;
+}
+
+.grid_tasks a {
+    text-decoration: none;
+}
+.grid_tasks a .grid_task:hover {
+    text-decoration: none;
+    border: #D2C8EE 2px solid;
+    #background-color: #EBDEFF;
 }
 
 .grid_tasks .grid_task p {
