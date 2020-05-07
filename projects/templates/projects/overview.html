@@ -1,10 +1,16 @@
-{% extends 'projects/base_with_sidebar.html' %}
+{% extends 'base.html' %}
 
-{% block content_title %}
+{% block title %}|Projects{% endblock %}
+
+{% block sidebar %}
+    {% include 'projects/sidebar.html' %}
+{% endblock %}
+
+{% block body_title %}
     Projects
 {% endblock %}
 
-{% block content_body %}
+{% block body_content %}
 
     {# Prints out list of projects user is administrator to. #}
     {% if administrator_to_projects %}

@@ -1,4 +1,4 @@
-{% extends 'base_with_sidebars/base_with_project_sidebar.html' %}
+{% extends 'base.html' %}
 
 
 {% block stylesheet %}
@@ -6,13 +6,19 @@
     <link rel="stylesheet" type="text/css" href="{% static 'tasks/css/tasks.css' %}" />
 {% endblock %}
 
+{% block title %}|Tasks{% endblock %}
 
-{% block content_title %}
+{% block sidebar %}
+    {% include 'tasks/sidebar.html' %}
+{% endblock %}
+
+
+{% block body_title %}
     Tasks
 {% endblock %}
 
 
-{% block  content_body %}
+{% block  body_content %}
     {% if tasks_sorted_by_sprints %}
         {% for sprint, tasks in tasks_sorted_by_sprints.items %}
 

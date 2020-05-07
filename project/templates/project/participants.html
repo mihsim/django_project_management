@@ -1,11 +1,15 @@
-{% extends 'base_with_sidebars/base_with_project_sidebar.html' %}
-{% block title %}|Project{% endblock %}
+{% extends 'base.html' %}
+{% block title %}|Participants{% endblock %}
 
-{% block content_title %}
+{% block sidebar %}
+    {% include "project/sidebar.html" %}
+{% endblock %}
+
+{% block body_title %}
     Participants
 {% endblock %}
 
-{% block content_body %}
+{% block body_content %}
     {# If selected project has participants, then they are printed out #}
     {# Project administrator can remove paricipants #}
     <ul class="list-group">

@@ -1,12 +1,15 @@
-{% extends 'base_with_sidebars/base_with_project_sidebar.html' %}
+{% extends 'base.html' %}
 
+{% block sidebar %}
+    {% include "project/sidebar.html" %}
+{% endblock %}
 
-{% block content_title %}
+{% block body_title %}
     Search users
 {% endblock %}
 
 
-{% block content_body %}
+{% block body_content %}
 
     {{ email }}
     {# Search filed is always shown. #}

@@ -1,0 +1,11 @@
+{% include "snippets/sidebar/account.html" %}
+{% include "snippets/sidebar/projects.html" %}
+{% include "snippets/sidebar/project.html" %}
+{% include "snippets/sidebar/sprints.html" %}
+{% include "snippets/sidebar/tasks.html" %}
+{% include "snippets/sidebar/task_create.html" %}
+{% include "snippets/sidebar/participants.html" %}
+{% if project.administrator == user %}
+    {% include "snippets/sidebar/project_change.html" %}
+    {% include "snippets/sidebar/project_delete.html" %}
+{% endif %}
