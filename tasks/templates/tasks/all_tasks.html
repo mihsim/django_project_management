@@ -30,14 +30,16 @@
 
             <section class="grid_tasks">
                 {% for task in tasks %}
-                    <div class="grid_task">
-                        <p class="task_name name">Name:</p>
-                        <p class="name_value">{{ task.name|truncatechars:35 }}</p>
-                        <p class="progress_name name">Progress:</p>
-                        <p class="progress_value">{{ task.progress }}</p>
-                        <p class="priority_name name">Priority:</p>
-                        <p class="priority_value">{{ task.priority }}</p>
-                    </div>
+                    <a href="{% url 'tasks:change' project.pk task.pk %}">
+                        <div class="grid_task">
+                            <p class="task_name name">Name:{{ task.pk }}</p>
+                            <p class="name_value">{{ task.name|truncatechars:35 }}</p>
+                            <p class="progress_name name">Progress:</p>
+                            <p class="progress_value">{{ task.progress }}</p>
+                            <p class="priority_name name">Priority:</p>
+                            <p class="priority_value">{{ task.priority }}</p>
+                        </div>
+                    </a>
                 {% endfor %}
             </section>
 

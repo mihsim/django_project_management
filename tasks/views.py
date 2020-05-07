@@ -8,7 +8,7 @@ from project.models import Project, ProjectParticipants
 from sprints.models import Sprint
 from project_management.settings import LOGIN_REDIRECT_URL
 from .models import Task
-from .forms import TaskCreateForm
+from .forms import TaskCreateForm, TaskChangeForProjectAdministratorForm, TaskChangeForProjectParticipantForm
 
 
 @login_required(login_url=LOGIN_REDIRECT_URL)
@@ -41,11 +41,8 @@ def create_view(request, project_pk):
     sprints = Sprint.objects.filter(project=project)
 
     # Task assignees may be selected from project participants.
-    try:
-        project_participants = ProjectParticipants.objects.get(project=project)
-        form.fields["assignee"] = ModelChoiceField(queryset=project_participants.user.all(), required=False)
-    except ProjectParticipants.DoesNotExist:
-        form.fields["assignee"] = ModelChoiceField(queryset=User.objects.none(), required=False)
+    assignee_selection = ProjectParticipants.get_project_participants(project)
+    form.fields["assignee"] = ModelChoiceField(queryset=assignee_selection, required=False)
 
     # Sprint may be selected from sprints that are created for this particular project.
     form.fields["sprint"] = ModelChoiceField(queryset=Sprint.objects.filter(project=project), required=False)
@@ -60,3 +57,26 @@ def create_view(request, project_pk):
 
     context = {'form': form, 'project': project, 'sprints': sprints}
     return render(request, "tasks/create.html", context)
+
+
+@login_required(login_url=LOGIN_REDIRECT_URL)
+def change_view(request, project_pk, task_pk):
+    project = get_object_or_404(Project, pk=project_pk)
+    participants = ProjectParticipants.objects.get(project=project).user.all()
+    task = get_object_or_404(Task, pk=task_pk)
+    if request.user == project.administrator:
+        form = TaskChangeForProjectAdministratorForm(request.POST or None, instance=task)
+        assignee_selection = ProjectParticipants.get_project_participants(project)
+        form.fields["assignee"] = ModelChoiceField(queryset=assignee_selection, required=False)
+        form.fields["sprint"] = ModelChoiceField(queryset=Sprint.objects.filter(project=project), required=False)
+    elif request.user in participants:
+        form = TaskChangeForProjectParticipantForm(request.POST or None, instance=task)
+    else:
+        return redirect('home:home')
+
+    if form.is_valid():
+        form.save()
+        return redirect('tasks:all', project.pk)
+
+    context = {'form': form, 'project': project, 'task': task}
+    return render(request, "tasks/change.html", context)

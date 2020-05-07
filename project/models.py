@@ -15,6 +15,15 @@ class ProjectParticipants(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     user = models.ManyToManyField(User)
 
+    @classmethod
+    def get_project_participants(cls, project):
+        """Used to provide assignee selection in Task form."""
+        try:
+            project_participants = cls.objects.get(project=project)
+            return project_participants.user.all()
+        except cls.DoesNotExist:
+            return User.objects.none()
+
     def __str__(self):
         return self.project.name
 
