@@ -1,12 +1,10 @@
-{% extends 'users/base_with_sidebar.html' %}
+{% extends 'base.html' %}
 
-{% block content_title %}
-    <h1 class="display-4 text-center">Change Data</h1>
-{% endblock %}
+{% block title %}|Account{% endblock %}
+{% block sidebar %}{% include "users/sidebar.html" %}{% endblock %}
+{% block body_title %}Change Data{% endblock %}
 
-{% block content_body %}
-
-
+{% block body_content %}
     <h3 class="text-center" style="padding-top: 30px">Username and email</h3>
     {% if account_modify_error %}
         <div class="alert alert-warning" role="alert">{{ account_modify_error }}</div>

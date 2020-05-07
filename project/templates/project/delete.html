@@ -1,11 +1,15 @@
-{% extends 'base_with_sidebars/base_with_project_sidebar.html' %}
-{% block title %}|Project{% endblock %}
+{% extends 'base.html' %}
 
-{% block content_title %}
+{% block title %}|Delete project{% endblock %}
+
+{% block sidebar %}
+    {% include "project/sidebar.html" %}
+{% endblock %}
+{% block body_title %}
     Delete project
 {% endblock %}
 
-{% block content_body %}
+{% block body_content %}
     <div class="alert alert-danger" role="alert">{{ warning_message }}</div>
     <form action="{% url 'project:delete' project.pk %}" method="POST"  class="text-center">
         {% csrf_token %}

@@ -1,11 +1,10 @@
-{% extends 'users/base_with_sidebar.html' %}
-{% block title %}|User{% endblock %}
+{% extends 'base.html' %}
 
-{% block content_title %}
-    Delete account
-{% endblock %}
+{% block title %}|Account{% endblock %}
+{% block sidebar %}{% include "users/sidebar.html" %}{% endblock %}
+{% block body_title %}Delete Account{% endblock %}
 
-{% block content_body %}
+{% block body_content %}
     <div class="alert alert-danger" role="alert">{{ warning_message }}</div>
     <form action="{% url 'users:delete' %}" method="POST" class="text-center">
         {% csrf_token %}

@@ -1,10 +1,12 @@
-{% extends 'base_with_sidebars/base_with_sprint_sidebar.html' %}
+{% extends 'base.html' %}
 
-{% block content_title %}
-    New sprint
-{% endblock %}
+{% block title %}|Create sprint{% endblock %}
 
-{% block content_body %}
+{% block sidebar %} {% include "sprints/sidebar.html" %} {% endblock %}
+
+{% block body_title %}New sprint{% endblock %}
+
+{% block body_content %}
     {% if error %}
         <div class="alert alert-danger">{{ error }}</div>
     {% endif %}

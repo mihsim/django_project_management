@@ -1,12 +1,16 @@
-{% extends 'base_with_sidebars/base_with_project_sidebar.html' %}
+{% extends 'base.html' %}
 
+{% block title %}|Change{% endblock %}
 
-{% block content_title %}
+{% block sidebar %}
+    {% include "project/sidebar.html" %}
+{% endblock %}
+
+{% block body_title %}
     Change project
 {% endblock %}
 
-
-{% block content_body %}
+{% block body_content %}
     <form action="{% url 'project:change' project.pk %}" method="POST">
         {% csrf_token %}
         <div class="form-group">
@@ -21,5 +25,4 @@
             <button class="btn btn-primary" type="submit">Change</button>
         </div>
     </form>
-
 {% endblock %}
