@@ -32,7 +32,7 @@
                 {% for task in tasks %}
                     <a href="{% url 'tasks:change' project.pk task.pk %}">
                         <div class="grid_task">
-                            <p class="task_name name">Name:{{ task.pk }}</p>
+                            <p class="task_name name">Name:</p>
                             <p class="name_value">{{ task.name|truncatechars:35 }}</p>
                             <p class="progress_name name">Progress:</p>
                             <p class="progress_value">{{ task.progress }}</p>
