@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}|Sprint{% endblock %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static 'sprints/css/sprints.css' %}">
+    <link rel="stylesheet" href="{% static 'sprints/css/sprint.css' %}">
+{% endblock %}
+
+{% block sidebar %}{% include "sprints/sidebar.html" %}{% endblock %}
+{% block body_title %}Sprints{% endblock %}
+{% block body_content %}
+
+    <div class="sprint_grid">
+        <div class="progress_column">
+
+        </div>
+    </div>
+
+{% endblock %}

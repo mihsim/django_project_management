@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 
 from .models import Sprint
 from project.models import Project
@@ -13,7 +14,7 @@ def all_sprints(request, project_pk):
     sprints = Sprint.objects.filter(project=project)
     content['project'] = project
     content['sprints'] = sprints
-    return render(request, "sprints/current_project_sprints.html", content)
+    return render(request, "sprints/sprints.html", content)
 
 
 @login_required(login_url=LOGIN_REDIRECT_URL)
@@ -42,3 +43,18 @@ def create(request, project_pk):
         return redirect('sprints:all', project_pk)
     else:
         return render(request, 'sprints/create.html', content)
+
+
+@login_required(login_url=LOGIN_REDIRECT_URL)
+def sprint_view(request, project_pk, sprint_pk):
+    return HttpResponse("Here will be sprints table.")
+    """
+    project = get_object_or_404(Project, pk=project_pk)
+    sprint = get_object_or_404(Sprint, pk=sprint_pk)
+    progress_options = ['Backlog', 'ToDo', 'In Progress', 'QA', 'Done']
+    context = {'project': project,
+               'sprint': sprint,
+
+               }
+    return render(request, 'sprints/sprint.html', context)
+    """
