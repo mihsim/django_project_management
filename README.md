@@ -10,7 +10,6 @@ It runs on `Docker` and uses `Django` with `PostgreSQL`.
   ```
   $ docker-compose build
   $ docker-compose up
-  $ docker-compose run web python3 manage.py makemigrations
   $ docker-compose run web python3 manage.py migrate
   ```
 - In your browser open: [http://localhost:8000/](http://localhost:8000/)
