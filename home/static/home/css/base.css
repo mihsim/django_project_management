@@ -89,5 +89,7 @@ footer{
     text-align: center;
     font-size: 3rem;
     color: #CFD8DC;
+}
+.page_title p {
     padding: 1rem;
 }
