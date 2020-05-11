@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
 from .models import Sprint
-from project.models import Project
+from project.models import Project, ProjectParticipants
+from tasks.models import Task
 from project_management.settings import LOGIN_REDIRECT_URL
 
 
@@ -47,14 +48,74 @@ def create(request, project_pk):
 
 @login_required(login_url=LOGIN_REDIRECT_URL)
 def sprint_view(request, project_pk, sprint_pk):
-    return HttpResponse("Here will be sprints table.")
-    """
     project = get_object_or_404(Project, pk=project_pk)
     sprint = get_object_or_404(Sprint, pk=sprint_pk)
-    progress_options = ['Backlog', 'ToDo', 'In Progress', 'QA', 'Done']
+    tasks = Task.objects.filter(sprint=sprint)
+
+    # Key-s are named same as CSS classes so it would possible to loop in HTML file.
+    tasks_by_progress = {'backlog': [],
+                         'todo': [],
+                         'inprogress': [],
+                         'qa': [],
+                         'done': [],
+                         }
+    progress_options = [option for option in tasks_by_progress]
+
+    for task in tasks:
+        tasks_by_progress[task.progress.lower().replace(" ", "")].append(task)
+
     context = {'project': project,
                'sprint': sprint,
-
+               'progress_options': progress_options,
+               'tasks_by_progress': tasks_by_progress,
                }
     return render(request, 'sprints/sprint.html', context)
-    """
+
+
+def get_current_progress_index(project_pk, sprint_pk, task_pk, request_user):
+    project = get_object_or_404(Project, pk=project_pk)
+    sprint = get_object_or_404(Sprint, pk=sprint_pk)
+    task = get_object_or_404(Task, pk=task_pk)
+
+    if sprint != task.sprint:
+        return redirect("home:home")
+    if project != sprint.project:
+        return redirect("home:home")
+    if request_user not in ProjectParticipants.get_project_participants(project):
+        return redirect("home:home")
+
+    progress_index = task.progress_sequence.index(task.progress)
+    return project, sprint, task, progress_index
+
+
+@login_required(login_url=LOGIN_REDIRECT_URL)
+def increase_task_progress(request, project_pk, sprint_pk, task_pk):
+    project, sprint, task, progress_index = get_current_progress_index(project_pk=project_pk,
+                                                                       sprint_pk=sprint_pk,
+                                                                       task_pk=task_pk,
+                                                                       request_user=request.user,
+                                                                       )
+    if task.progress == task.progress_sequence[-1]:
+        # It should not be possible to reach progress increase function if task has last progress option.
+        return redirect("home:home")
+
+    task.progress = task.progress_sequence[progress_index + 1]
+    task.save()
+    return redirect("sprints:sprint", project_pk, sprint_pk)
+
+
+@login_required(login_url=LOGIN_REDIRECT_URL)
+def decrease_task_progress(request, project_pk, sprint_pk, task_pk):
+    project, sprint, task, progress_index = get_current_progress_index(project_pk=project_pk,
+                                                                       sprint_pk=sprint_pk,
+                                                                       task_pk=task_pk,
+                                                                       request_user=request.user,
+                                                                       )
+    if task.progress == task.progress_sequence[0]:
+        # It should not be possible to reach progress decrease function if task has first progress option.
+        return redirect("home:home")
+
+    task.progress = task.progress_sequence[progress_index - 1]
+    task.save()
+    return redirect("sprints:sprint", project_pk, sprint_pk)
+

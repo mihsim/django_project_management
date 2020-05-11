@@ -1,11 +1,14 @@
 html {
-    min-height: 100%;
+    min-height: 100vh;
     background-color: #F5F1FF;
 }
 
 body{
-    min-height: 100%;
+    width: 1200px;
+    min-height: 100vh;
     background-color: #F9F7FC;
+    margin: 0 auto;
+    padding: 0 0.5rem;
 }
 
 section{
@@ -14,22 +17,25 @@ section{
 
 header{
     background: #1D0266;
-    height: 50px;
+    height: 3rem;
 }
 
 footer{
     background: #D2C8EE;
-    position: center;
-    bottom: 0;
     width: 100%;
     text-align: center;
-    padding: 0.5rem 0;
+    height: 2rem;
 }
 
+/* Navbar */
+.navbar-brand {
+    font-family: 'Audiowide', cursive;
+}
+
+/* sidebar */
 .top_to_bottom{
     /*view height - header height - footer height*/
-    min-height: calc(100vh - 92px);
-
+    min-height: calc(100vh - 3rem - 2rem);
 }
 
 #nav_sidebar {
@@ -45,6 +51,7 @@ footer{
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+
 #sidebar .nav .nav-item:hover {
     background: #3306AC;
 }
@@ -58,4 +65,31 @@ footer{
 
 #sidebar .nav a:hover{
   color: #fff;
+}
+
+/* scrollable section left from sidebar */
+.scrollable{
+    overflow: auto;
+    /* body width - sidebar with - 3*0.5rem padding */
+    width: calc(1200px - 250px - 1.5rem);
+    border: 2px dotted #EDE1FF;
+    border-radius: 5px;
+    margin: 0;
+    padding: 0;
+    /* min height 100vf - footer height - navbar height*/
+    min-height: calc(100vh - 2rem - 3rem);
+}
+
+.right_padding_05rem {
+    padding: 0 0 0 0.5rem;
+}
+
+.page_title{
+    font-family: 'Audiowide', cursive;
+    text-align: center;
+    font-size: 3rem;
+    color: #CFD8DC;
+}
+.page_title p {
+    padding: 1rem;
 }

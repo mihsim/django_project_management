@@ -3,18 +3,49 @@
 
 {% block title %}|Sprint{% endblock %}
 {% block stylesheet %}
-    <link rel="stylesheet" href="{% static 'sprints/css/sprints.css' %}">
     <link rel="stylesheet" href="{% static 'sprints/css/sprint.css' %}">
 {% endblock %}
 
 {% block sidebar %}{% include "sprints/sidebar.html" %}{% endblock %}
-{% block body_title %}Sprints{% endblock %}
 {% block body_content %}
+    <div class="table_background scrollable">
+    <div class="sprint_table">
+        {# ROLLBACK POINT #}
 
-    <div class="sprint_grid">
-        <div class="progress_column">
+        <div class="backlog_title column_title">Backlog</div>
+        <div class="todo_title column_title">ToDo</div>
+        <div class="in_progress_title column_title">In Progress</div>
+        <div class="qa_title column_title">QA</div>
+        <div class="done_title column_title">Done</div>
+        {% for progress_oprion, tasks in tasks_by_progress.items %}
+            {% for option in progress_options %}
+                <div class="{{ option }} sprint_column">
+                    {% if progress_oprion == option %}
+                        {% for task in tasks %}
+                            <div class="column_item">
+                                {% if task.progress != 'Backlog' %}
+                                    <form action="{% url 'sprints:decrease_task_progress' project.pk sprint.pk task.pk %}" class="sprint_button button_left">
+                                        <button class="sprint_button button_left" type="submit"></button>
+                                    </form>
 
-        </div>
+                                {% endif %}
+                                <p class="col_item_task">Task:</p>
+                                <p class="col_item_task_value">{{ task.name|truncatechars:30 }}</p>
+                                <p class="col_item_assignee">Assignee:</p>
+                                <p class="col_item_assignee_value">{{ task.assignee }}</p>
+                                {% if task.progress != 'Done' %}
+                                    <form action="{% url 'sprints:increase_task_progress' project.pk sprint.pk task.pk %}" class="sprint_button button_right">
+                                        <button class="sprint_button button_right" type="submit"></button>
+                                    </form>
+
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% endfor %}
     </div>
 
+    </div>
 {% endblock %}

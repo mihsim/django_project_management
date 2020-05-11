@@ -19,6 +19,10 @@ class Task(models.Model):
         quality_assurance = 'QA'
         done = 'Done'
 
+    @property
+    def progress_sequence(self):
+        return ['Backlog', 'To Do', 'In Progress', 'QA', 'Done']
+
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     priority = models.IntegerField(choices=Priority.choices, default=1)

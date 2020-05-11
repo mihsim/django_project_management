@@ -1,5 +1,106 @@
-.sprint_grid {
+
+.sprint_table {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    background-color: #3306AC;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "backlog_title todo_title in_progress_title qa_title done_title"
+        "backlog todo inprogress qa done";
+    grid-gap: 0.2rem;
+    background-color: #EDE1FF;
+    border: #D2C8EE 1px solid;
+    border-radius: 10px;
+    padding: 5px;
+    width: 1500px;
 }
+
+.sprint_column {
+    /*Gap inside one column between tasks*/
+    grid-gap: 0.2rem;
+    border-right: solid 1px whitesmoke;
+    height: calc(100vh - 9rem);
+
+}
+
+.column_title {
+    font-family: 'Audiowide', cursive;
+    text-align: center;
+    color: #270485;
+    font-weight: bold;
+}
+
+/* Table level */
+.backlog_title {grid-area: backlog_title;}
+.todo_title { grid-area: todo_title; }
+.in_progress_title { grid-area: in_progress_title; }
+.qa_title { grid-area: qa_title; }
+.done_title { grid-area: done_title; }
+.backlog {grid-area: backlog;}
+.todo { grid-area: todo; }
+.inprogress { grid-area: inprogress; }
+.qa { grid-area: qa; }
+.done { grid-area: done; }
+
+/* Tassk item level */
+.column_item {
+    display: grid;
+    grid-template-areas:
+        "button_left col_item_task col_item_task_value button_right"
+        "button_left col_item_assignee col_item_assignee_value button_right";
+    grid-template-columns: 1rem 1fr 6fr 1rem;
+    font-family: "Courier New", Courier, monospace;
+    color: #333;
+    font-size: 0.75rem;
+    background: #F5F1FF;
+    height: 5rem;
+    border: #D2C8EE 1px solid;
+    border-radius: 1rem;
+    padding: 0;
+}
+
+.column_item p {
+    margin: 0;
+    padding: 0.25rem 0.5rem;
+}
+
+.col_item_task {grid-area: col_item_task;}
+.col_item_task_value {grid-area: col_item_task_value;}
+.col_item_assignee {grid-area: col_item_assignee;}
+.col_item_assignee_value { grid-area: col_item_assignee_value;}
+
+
+/* Buttons on sprint board to move tasks between columns */
+.sprint_button {
+    background-color: whitesmoke;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 1.5rem;
+    height: 100%;
+    cursor: pointer;
+
+}
+
+.button_right {
+    grid-area: button_right;
+    background-image: url('../img/right-arrow-svgrepo-com.svg');
+    border-radius: 0 1rem 1rem 0;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.button_right:hover {
+    background-color: #25FC9E;
+}
+
+.button_left {
+    grid-area: button_left;
+    background-image: url('../img/left-arrow-svgrepo-com.svg');
+    border-radius: 1rem 0 0 1rem;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.button_left:hover {
+    background-color: #FE6B6B ;
+}
+
