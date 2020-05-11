@@ -56,6 +56,6 @@
     overflow: hidden;
 }
 .progress_name { grid-area: progress_name; }
-.progress_value { grid-area: progress_value; }
+.progress_value { grid-area: progress_value;}
 .priority_name { grid-area: priority_name; }
 .priority_value { grid-area: priority_value; }

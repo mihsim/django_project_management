@@ -1,10 +1,9 @@
 .sprint_table {
     display: grid;
     grid-gap: 0.2rem;
-
     background-color: #EDE1FF;
-    padding: 0;
-    padding: 5px;
+    /*background-color: #CFD8DC;*/
+    padding: 3px;
     border-radius: 10px;
 }
 
@@ -28,9 +27,9 @@
 }
 
 .sprint_line:first-child {
+    font-family: 'Audiowide', cursive;
     background-color: #EDE1FF;
     color: #270485;
-    font-weight: bold;
     border-radius: 10px 10px 0 0;
     margin: 0;
     padding: 0;

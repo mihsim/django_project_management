@@ -4,6 +4,7 @@ from django.http import HttpResponse
 
 from .models import Sprint
 from project.models import Project
+from tasks.models import Task
 from project_management.settings import LOGIN_REDIRECT_URL
 
 
@@ -47,14 +48,32 @@ def create(request, project_pk):
 
 @login_required(login_url=LOGIN_REDIRECT_URL)
 def sprint_view(request, project_pk, sprint_pk):
-    return HttpResponse("Here will be sprints table.")
-    """
     project = get_object_or_404(Project, pk=project_pk)
     sprint = get_object_or_404(Sprint, pk=sprint_pk)
-    progress_options = ['Backlog', 'ToDo', 'In Progress', 'QA', 'Done']
+    tasks = Task.objects.filter(sprint=sprint)
+
+    tasks_by_progress = {'backlog': [],
+                         'todo': [],
+                         'inprogress': [],
+                         'qa': [],
+                         'done': [],
+                         }
+    progress_options = [option for option in tasks_by_progress]
+
+    for task in tasks:
+        tasks_by_progress[task.progress.lower().replace(" ", "")].append(task)
+
     context = {'project': project,
                'sprint': sprint,
-
+               'progress_options': progress_options,
+               'tasks_by_progress': tasks_by_progress,
                }
     return render(request, 'sprints/sprint.html', context)
-    """
+
+
+def increase_task_progress(request, project_pk, sprint_pk, task_pk):
+    return HttpResponse("This will increase task status.")
+
+
+def decrease_task_progress(request, project_pk, sprint_pk, task_pk):
+    return HttpResponse("This will decrease task progress")
