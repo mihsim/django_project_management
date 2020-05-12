@@ -1,30 +1,29 @@
 {% extends 'base.html' %}
 
 {% block body_content %}
-    <div class="container display-4 text-center my-auto" id="title_font">
-        Log In
-    </div>
-    <form action="{% url 'users:login' %}" method="POST" class="container text-center">
+    <form method="post">
         {% csrf_token %}
 
-        {% if error %}
-            <div class="alert alert-danger" role="alert">{{ error }}</div>
+        {% for field in login_form %}
+            <p>
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_field %}
+                    <small style="color: gray;">{{ field.help_text }}</small>
+                {% endif %}
+            </p>
+        {% endfor %}
+        {% for field in login_form %}
+            {% for error in field.errors %}
+                <p style="color: red;">{{ error }}</p>
+            {% endfor %}
+        {% endfor %}
+        {% if login_form.non_field_errors %}
+            <div style="color: red;">
+                <p>{{ login_form.non_field_errors }}</p>
+            </div>
         {% endif %}
 
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1" style="width: 40px">#</span>
-            </div>
-            <input type="text" name="username" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-        </div>
-
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1" style="width: 40px">*</span>
-            </div>
-            <input type="password" name="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
-        </div>
-        <br>
-        <button type="submit" class="btn btn-outline-success" type="button">Log In</button>
+        <button type="submit">Log in</button>
     </form>
 {% endblock %}
