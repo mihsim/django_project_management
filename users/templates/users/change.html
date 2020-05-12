@@ -5,7 +5,7 @@
 {% block body_title %}Change Data{% endblock %}
 
 {% block body_content %}
-    <form action="" method="post">
+    <form action="{% url 'users:change' %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Update</button>
