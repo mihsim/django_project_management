@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserChangeForm
 
 from .models import MyUser
 from .forms import RegistrationForm, UserAuthenticationForm, MyUserChangeForm
@@ -65,12 +66,12 @@ def view_myself(request):
 def change(request):
     context = {}
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
+        form = MyUserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
         return redirect("users:view_myself")
     else:
-        form = MyUserChangeForm()
+        form = MyUserChangeForm(instance=request.user)
         context['form'] = form
         return render(request, 'users/change.html', context)
 

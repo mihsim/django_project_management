@@ -1,12 +1,8 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, ReadOnlyPasswordHashField
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, ReadOnlyPasswordHashField, PasswordChangeForm
 from django.contrib.auth import authenticate
 
 from .models import MyUser
-
-
-
-from django.contrib import auth
 
 
 class RegistrationForm(UserCreationForm):
@@ -19,34 +15,26 @@ class RegistrationForm(UserCreationForm):
 
 class UserAuthenticationForm(forms.ModelForm):
     # widget=forms.PasswordInput - changes characters to ---> **************
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
 
     class Meta:
         model = MyUser  # Tells what fields will be available
-        fields = ("email", "password1", )  # Tells which fields will be shown.
+        fields = ("email", "password", )  # Tells which fields will be shown.
 
-    def clean_password2(self):
-        password1 = self.cleaned_data.get("password1")
-        password2 = self.cleaned_data.get("password2")
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Passwords don't match")
-        return password2
-
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.set_password(self.cleaned_data["password1"])
-        if commit:
-            user.save()
-        return user
+    def clean(self):
+        # clean method is available to every form that inherits from django.forms.ModelForm
+        # claen(self) is run before form can do anything
+        # so any logic writen here will be run first.
+        if self.is_valid():  # False id password has a wrong format.
+            email = self.cleaned_data["email"]
+            password = self.cleaned_data["password"]
+            if not authenticate(email=email, password=password):
+                raise forms.ValidationError("Invalid login")
 
 
 class MyUserChangeForm(UserChangeForm):
-    password = ReadOnlyPasswordHashField()
+    password = None
 
     class Meta:
         model = MyUser
-        fields = ("username", "email", "password")
-
-    def clean_password(self):
-        return self.initial["password"]
+        fields = ("username", "email")
