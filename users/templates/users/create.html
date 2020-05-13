@@ -1,22 +1,37 @@
-{% extends 'base.html' %}
+{# extends 'base.html' #}
+{% extends 'users/base_sing_up_in.html' %}
 
 {% block body_content %}
-    <form action="" method="post">
-        {% csrf_token %}
-        {% for field in registration_form %}
-            <p>
-                {{field.label_tag}}
-                {{ field }}
-                {% if field.help_text %}
-                    <small style="color: grey;">{{ field.help_text }}</small>
-                {% endif %}
-                {% for error in field.errors %}
-                    <p style="color: red;">{{ error }}</p>
-                {% endfor %}
-            </p>
+    <div id="container">
+        <div class="form-wrap">
+            <h1>Register</h1>
+            <p>It's free</p>
 
-        {% endfor %}
-        <button type="submit">Register</button>
-    </form>
+            <form action="" method="post">
+                {% csrf_token %}
+
+                {% for field in registration_form %}
+                         <div class="form-group">
+                            {{field.label_tag}}
+                            {{ field }}
+                         </div>
+
+                        {% for error in field.errors %}
+                            <p class="error">{{ error }}</p>
+                        {% endfor %}
+
+
+
+                {% endfor %}
+                <button type="submit">Sign Up</button>
+                <p class="bottom-text">
+                    By clicking the Sign Up button, you agree to give your soul to developing better world.
+                </p>
+            </form>
+        </div>
+        <footer>
+            <p>Already have an account? <a href="{% url 'users:login' %}">Login Here</a></p>
+        </footer>
+    </div>
 
 {% endblock %}

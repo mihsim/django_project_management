@@ -136,6 +136,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "home/static/"),
     os.path.join(BASE_DIR, 'tasks/static/'),
     os.path.join(BASE_DIR, 'sprints/static/'),
+    os.path.join(BASE_DIR, 'users/static/'),
 ]
 
 STATIC_URL = "/static/"
