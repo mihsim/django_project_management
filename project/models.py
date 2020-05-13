@@ -1,11 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import User
+
+from users.models import MyUser
 
 
 class Project(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField(blank=True)
-    administrator = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    administrator = models.ForeignKey(MyUser, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -13,7 +14,7 @@ class Project(models.Model):
 
 class ProjectParticipants(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    user = models.ManyToManyField(User)
+    user = models.ManyToManyField(MyUser)
 
     @classmethod
     def get_project_participants(cls, project):
@@ -22,7 +23,7 @@ class ProjectParticipants(models.Model):
             project_participants = cls.objects.get(project=project)
             return project_participants.user.all()
         except cls.DoesNotExist:
-            return User.objects.none()
+            return MyUser.objects.none()
 
     def __str__(self):
         return self.project.name
@@ -30,8 +31,8 @@ class ProjectParticipants(models.Model):
 
 class ProjectParticipantsInvites(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="from_user")
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="to_user")
+    from_user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name="from_user")
+    to_user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name="to_user")
     status = models.CharField(max_length=10, default='Waiting')
 
     @classmethod
@@ -46,9 +47,9 @@ class ProjectParticipantsInvites(models.Model):
 
         try:  # 1
             project = Project.objects.get(id=project_id)
-            from_user = User.objects.get(id=from_user_id)
-            to_user = User.objects.get(id=to_user_id)
-        except (Project.DoesNotExist, User.DoesNotExist):
+            from_user = MyUser.objects.get(id=from_user_id)
+            to_user = MyUser.objects.get(id=to_user_id)
+        except (Project.DoesNotExist, MyUser.DoesNotExist):
             return "Error", "Bad data provided!"
 
         try:  # 2
@@ -80,8 +81,8 @@ class ProjectParticipantsInvites(models.Model):
         :rtype: Tuple(string, string, User instance) or Tuple(string, string, None)
         """
         try:
-            to_user = User.objects.get(email=to_user_email)
-        except User.DoesNotExist:
+            to_user = MyUser.objects.get(email=to_user_email)
+        except MyUser.DoesNotExist:
             return "Error", "No registered user has that email.", None
         try:
             ProjectParticipants.objects.get(project=project_id, user=to_user)

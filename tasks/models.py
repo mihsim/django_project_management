@@ -1,6 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
 
+from users.models import MyUser
 from sprints.models import Sprint
 from project.models import Project
 
@@ -30,7 +30,7 @@ class Task(models.Model):
     story_points = models.IntegerField(null=True, blank=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False, blank=True)
     sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE, null=True, blank=True)
-    assignee = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True, blank=True)
+    assignee = models.ForeignKey(MyUser, on_delete=models.DO_NOTHING, null=True, blank=True)
 
     def __str__(self):
         return self.name

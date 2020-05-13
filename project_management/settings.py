@@ -142,3 +142,6 @@ STATIC_URL = "/static/"
 
 # Used with decorator: @login_required(login_url=LOGIN_REDIRECT_URL)
 LOGIN_REDIRECT_URL = "/account/login/"
+
+# Override Django's default user model.
+AUTH_USER_MODEL = 'users.MyUser'

@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views import View
 
-from project.models import User, Project, ProjectParticipants, ProjectParticipantsInvites
+from users.models import MyUser
+from project.models import Project, ProjectParticipants, ProjectParticipantsInvites
 
 
 # Create your views here.
@@ -13,7 +14,7 @@ class Projects(View):
     - Has button "Create new project" which leads to next page.
     """
     def get(self, request):
-        user = User.objects.get(id=request.user.pk)
+        user = MyUser.objects.get(id=request.user.pk)
         projects_user_is_administrator_to = Project.objects.filter(administrator=user)
         projects_user_is_participant_to = ProjectParticipants.objects.filter(user=user)
         projects_user_is_invited_to = ProjectParticipantsInvites.objects.filter(to_user=user)
@@ -29,7 +30,7 @@ class Create(View):
     def post(self, request):
         project = Project.objects.create(name=request.POST["project_name"],
                                          description=request.POST["project_description"],
-                                         administrator=User.objects.get(id=request.user.pk)
+                                         administrator=MyUser.objects.get(id=request.user.pk)
                                          )
         project.save()
 

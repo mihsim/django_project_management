@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
 
 
 def home(request):
@@ -8,4 +7,4 @@ def home(request):
     if request.user.is_authenticated:
         return redirect("projects:overview")
     else:
-        return render(request, 'users/login.html')
+        return redirect("users:login")
