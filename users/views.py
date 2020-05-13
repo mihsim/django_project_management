@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserChangeForm
 
 from .models import MyUser
 from .forms import RegistrationForm, UserAuthenticationForm, MyUserChangeForm
@@ -79,10 +78,10 @@ def change(request):
 @login_required
 def account_delete(request):
     if request.method == 'GET':
-        warning_message = "Deleted account can not be restored!"
+        warning_message = "Deleted account can not be restored! All projects created by you will be deleted!"
         return render(request, 'users/delete.html', {'warning_message': warning_message})
 
     if request.method == 'POST':
-        user = MyUser.objects.get(username=request.user.username)
+        user = MyUser.objects.get(pk=request.user.pk)
         user.delete()
         return redirect("home:home")

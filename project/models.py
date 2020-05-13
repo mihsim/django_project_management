@@ -1,12 +1,12 @@
 from django.db import models
 
-from users.models import  MyUser
+from users.models import MyUser
 
 
 class Project(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField(blank=True)
-    administrator = models.ForeignKey(MyUser, on_delete=models.DO_NOTHING)
+    administrator = models.ForeignKey(MyUser, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
