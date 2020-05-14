@@ -2,26 +2,25 @@
 {% load static %}
 
 {% block title %}|Sprint{% endblock %}
-{% block stylesheet %} <link rel="stylesheet" href="{% static 'sprints/css/sprints.css' %}">{% endblock %}
 
 {% block sidebar %}{% include "sprints/sidebar.html" %}{% endblock %}
 {% block body_title %}Sprints{% endblock %}
 {% block body_content %}
 
     {% if sprints %}
-        <ul class="sprint_table">
-            <div class="sprint_line title">
-                <p class="line_item name">Sprint #</p>
-                <p class="line_item start_date">Start date</p>
-                <p class="line_item end_date">End date</p>
-                <p class="line_item story_points">Story points</p>
+        <ul class="table_wrapper">
+            <div class="table_line">
+                <p class="line_item">Sprint #</p>
+                <p class="line_item">Start date</p>
+                <p class="line_item">End date</p>
+                <p class="line_item">Story points</p>
             </div>
             {% for sprint in sprints %}
-                <a class="sprint_line" href="{% url 'sprints:sprint' project.pk sprint.pk %}">
-                    <p class="line_item name">{{ sprint.name }}</p>
-                    <p class="line_item start_date">{{ sprint.date_from }}</p>
-                    <p class="line_item end_date">{{ sprint.date_to }}</p>
-                    <p class="line_item story_points">{{ sprint.planned_story_points }}</p>
+                <a class="table_line" href="{% url 'sprints:sprint' project.pk sprint.pk %}">
+                    <p class="line_item">{{ sprint.name }}</p>
+                    <p class="line_item">{{ sprint.date_from }}</p>
+                    <p class="line_item">{{ sprint.date_to }}</p>
+                    <p class="line_item">{{ sprint.planned_story_points }}</p>
                 </a>
             {% endfor %}
         </ul>
