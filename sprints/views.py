@@ -2,6 +2,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
+from datetime import datetime
+
 from .models import Sprint
 from project.models import Project, ProjectParticipants
 from tasks.models import Task
@@ -30,12 +32,23 @@ def create(request, project_pk):
     sprint_number = len(Sprint.objects.filter(project=project)) + 1
 
     if request.method == "POST":
+
+        # Check that request.post start_date is before than end_date.
         if request.POST["start_date"] > request.POST["end_date"]:
             content["error"] = "End date can not be before start date"
             return render(request, 'sprints/create.html', content)
 
+        # Check that request.post start_date is after latest end_date in database.
+        last_sprint_end_date = Sprint.objects.filter()
+        if last_sprint_end_date:
+            form_start_date = datetime.strptime(request.POST['start_date'], "%Y-%m-%d").date()
+            db_last_date = last_sprint_end_date.latest('date_to').date_to
+            if form_start_date <= db_last_date:
+                content["error"] = "New sprint can not start before previous ones have ended. Latest end date: {}".format(db_last_date)
+                return render(request, 'sprints/create.html', content)
+
         Sprint.objects.create(
-            name=f"Sprint {sprint_number}",
+            name="Sprint {0}".format(sprint_number),
             project=project,
             date_from=request.POST["start_date"],
             date_to=request.POST["end_date"],
