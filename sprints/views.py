@@ -12,12 +12,15 @@ from project_management.settings import LOGIN_REDIRECT_URL
 
 @login_required(login_url=LOGIN_REDIRECT_URL)
 def all_sprints(request, project_pk):
-    content = {}
+    context = {}
     project = get_object_or_404(Project, pk=project_pk)
     sprints = Sprint.objects.filter(project=project)
-    content['project'] = project
-    content['sprints'] = sprints
-    return render(request, "sprints/sprints.html", content)
+
+
+
+    context['project'] = project
+    context['sprints'] = sprints
+    return render(request, "sprints/sprints.html", context)
 
 
 @login_required(login_url=LOGIN_REDIRECT_URL)
