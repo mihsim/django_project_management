@@ -1,29 +1,37 @@
-{% extends 'base.html' %}
-
-{% block body_content %}
-    <form method="post">
-        {% csrf_token %}
-
-        {% for field in login_form %}
-            <p>
-                {{ field.label_tag }}
-                {{ field }}
-                {% if field.help_field %}
-                    <small style="color: gray;">{{ field.help_text }}</small>
-                {% endif %}
-            </p>
-        {% endfor %}
-        {% for field in login_form %}
-            {% for error in field.errors %}
-                <p style="color: red;">{{ error }}</p>
-            {% endfor %}
-        {% endfor %}
-        {% if login_form.non_field_errors %}
-            <div style="color: red;">
-                <p>{{ login_form.non_field_errors }}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Zen Projects</title>
+    <link rel="stylesheet" href="{% static 'users/css/sign_up_in.css' %}">
+</head>
+<body>
+    <div id="container">
+        {% block content %}
+            <div class="form-wrap">
+                <h1>Log in</h1>
+                <form action="{% url 'users:login' %}" method="post">
+                    {% csrf_token %}
+                    {% for field in login_form %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
+                        {% for error in field.errors %}
+                            <p class="error">{{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in login_form.non_field_errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                    <button type="submit">Log in</button>
+                </form>
             </div>
-        {% endif %}
-
-        <button type="submit">Log in</button>
-    </form>
-{% endblock %}
+            <footer>
+                <p>Dont have a account? <a href="{% url 'users:create' %}">Register Here</a></p>
+            </footer>
+        {% endblock %}
+    </div>
+</body>
+</html>

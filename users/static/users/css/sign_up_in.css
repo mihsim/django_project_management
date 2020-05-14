@@ -39,6 +39,7 @@ a {
 
 .form-wrap .error {
     color: #FF0000;
+    list-style-type: none;
 }
 
 .form-wrap .form-group {
