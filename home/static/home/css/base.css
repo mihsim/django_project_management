@@ -102,8 +102,8 @@ a {
 .table_wrapper {
     display: grid;
     grid-gap: 0.2rem;
-    background-color: #EDE1FF;
-    /*background-color: #CFD8DC;*/
+    background-color: #686484;
+
     padding: 3px;
     border-radius: 10px;
 }
@@ -111,26 +111,26 @@ a {
 .table_line {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    color: #333;
+    color: #686484;
     font-size: 1rem;
     text-decoration: none;
     text-align: center;
-    border: #D2C8EE 1px solid;
-    background: #F5F1FF;
+    border: #686484 1px solid;
+    background: #ecebef;
     margin: 0;
     padding: 0;
 }
 
 .table_line:hover {
-    background-color: #EDE1FF;
-    color: #270485;
+    background-color: #d9d8e0;
+    color: #555175;
     text-decoration: none;
 }
 
 .table_line:first-child {
     font-family: 'Audiowide', cursive;
-    background-color: #EDE1FF;
-    color: #270485;
+    color: #ecebef;
+    background-color: #686484;
     border-radius: 10px 10px 0 0;
     margin: 0;
     padding: 0;
@@ -142,7 +142,7 @@ a {
 }
 
 .table_line .line_item {
-    border-right: #D2C8EE solid 1px;
+    border-right: #686484 solid 1px;
     padding: 1rem 0;
     margin: 0;
 }
