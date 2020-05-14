@@ -1,0 +1,3 @@
+.table_line {
+    grid-template-columns: repeat(3, 1fr);
+}
