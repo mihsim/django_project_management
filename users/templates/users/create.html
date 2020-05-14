@@ -1,37 +1,27 @@
-{# extends 'base.html' #}
-{% extends 'users/base_sing_up_in.html' %}
+{% extends 'users/login.html' %}
 
-{% block body_content %}
-    <div id="container">
-        <div class="form-wrap">
-            <h1>Register</h1>
-            <p>It's free</p>
-
-            <form action="" method="post">
-                {% csrf_token %}
-
-                {% for field in registration_form %}
-                         <div class="form-group">
-                            {{field.label_tag}}
-                            {{ field }}
-                         </div>
-
-                        {% for error in field.errors %}
-                            <p class="error">{{ error }}</p>
-                        {% endfor %}
-
-
-
+{% block content %}
+    <div class="form-wrap">
+        <h1>Register</h1>
+        <p>It's free</p>
+        <form action="{% url 'users:create' %}" method="post">
+            {% csrf_token %}
+            {% for field in registration_form %}
+                <div class="form-group">
+                    {{field.label_tag}}
+                    {{ field }}
+                </div>
+                {% for error in field.errors %}
+                    <p class="error">{{ error }}</p>
                 {% endfor %}
-                <button type="submit">Sign Up</button>
-                <p class="bottom-text">
-                    By clicking the Sign Up button, you agree to give your soul to developing better world.
-                </p>
-            </form>
-        </div>
-        <footer>
-            <p>Already have an account? <a href="{% url 'users:login' %}">Login Here</a></p>
-        </footer>
+            {% endfor %}
+            <button type="submit">Sign Up</button>
+            <p class="bottom-text">
+                By clicking the Sign Up button, you agree to give your soul to developing better world.
+            </p>
+        </form>
     </div>
-
+    <footer>
+        <p>Already have an account? <a href="{% url 'users:login' %}">Login Here</a></p>
+    </footer>
 {% endblock %}
