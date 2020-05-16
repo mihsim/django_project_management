@@ -1,0 +1,16 @@
+[
+{
+    "model": "tasks.task",
+    "pk": 1,
+    "fields": {
+        "name": "Kill the driver",
+        "description": "With a knife.",
+        "priority": 1,
+        "progress": "Backlog",
+        "story_points": 1,
+        "project": 1,
+        "sprint": null,
+        "assignee": 1
+    }
+}
+]

@@ -34,17 +34,18 @@ def tasks_all(request, project_pk):
     return render(request, "tasks/all_tasks.html", context)
 
 
-def recalculate_sprint_story_points(task):
+def recalculate_sprint_story_points():
     # Used when changing and creating tasks.
-    sprint = Sprint.objects.get(pk=task.sprint.pk)
-    tasks_in_sprint = Task.objects.filter(sprint=sprint)
+    sprints = Sprint.objects.all()
+    for sprint in sprints:
+        tasks_in_sprint = Task.objects.filter(sprint=sprint)
 
-    total_points = 0
-    for task_in_sprint in tasks_in_sprint:
-        if task_in_sprint.story_points is not None:
-            total_points += task_in_sprint.story_points
-    sprint.planned_story_points = total_points
-    sprint.save()
+        total_points = 0
+        for task_in_sprint in tasks_in_sprint:
+            if task_in_sprint.story_points is not None:
+                total_points += task_in_sprint.story_points
+        sprint.planned_story_points = total_points
+        sprint.save()
     return None
 
 
@@ -67,7 +68,7 @@ def create_view(request, project_pk):
         task_object = form.save(commit=False)
         task_object.project = project
         task_object.save()
-        recalculate_sprint_story_points(task_object)
+        recalculate_sprint_story_points()
         return redirect("tasks:all", project.pk)
 
     context = {'form': form, 'project': project, 'sprints': sprints}
@@ -91,7 +92,7 @@ def change_view(request, project_pk, task_pk):
 
     if form.is_valid():
         form.save()
-        recalculate_sprint_story_points(task)
+        recalculate_sprint_story_points()
         return redirect('tasks:all', project.pk)
 
     context = {'form': form, 'project': project, 'task': task}
