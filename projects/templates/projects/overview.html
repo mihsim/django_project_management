@@ -14,22 +14,29 @@
 
     {# Prints out list of projects user is administrator to. #}
     {% if administrator_to_projects %}
-        <h3>You are administrator to:</h3>
-        <ul class="list-group">
+        <ul class="table_wrapper">
+            <li class="table_line">
+                <h3 class="line_item">You are administrator to:</h3>
+            </li>
             {% for project in administrator_to_projects %}
-                <a href="{% url "project:project" project.id %}" class="list-group-item list-group-item-action">{{ project }}</a>
+                <li class="table_line">
+                    <a href="{% url "project:project" project.id %}" class="line_item">{{ project }}</a>
+                </li>
             {% endfor %}
         </ul>
     {% endif %}
 
-
     {# Prints out list of projects user is participating, but is not administrator to. #}
     {% if participations_to_projects %}
-        <h3>You are contributor to:</h3>
-        <ul class="list-group">
+        <ul class="table_wrapper">
+        <li class="table_line">
+            <h3 class="line_item">You are contributor to:</h3>
+        </li>
+
             {% for participation in participations_to_projects %}
-                {# project.project.id - project instance has a foreing key field named project.#}
-                <a href="{% url "project:project" participation.project.id %}" class="list-group-item list-group-item-action">{{ participation.project.name }}</a>
+                <li class="table_line">
+                    <a href="{% url "project:project" participation.project.id %}" class="line_item">{{ participation.project.name }}</a>
+                </li>
             {% endfor %}
         </ul>
     {% endif %}
