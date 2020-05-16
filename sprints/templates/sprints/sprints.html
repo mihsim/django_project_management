@@ -9,14 +9,14 @@
 
     {% if sprints %}
         <ul class="table_wrapper">
-            <div class="table_line">
+            <div class="table_line columns-4">
                 <p class="line_item">Sprint #</p>
                 <p class="line_item">Start date</p>
                 <p class="line_item">End date</p>
                 <p class="line_item">Story points</p>
             </div>
             {% for sprint in sprints %}
-                <a class="table_line" href="{% url 'sprints:sprint' project.pk sprint.pk %}">
+                <a class="table_line columns-4" href="{% url 'sprints:sprint' project.pk sprint.pk %}">
                     <p class="line_item">{{ sprint.name }}</p>
                     <p class="line_item">{{ sprint.date_from }}</p>
                     <p class="line_item">{{ sprint.date_to }}</p>

@@ -108,9 +108,11 @@ a {
     border-radius: 10px;
 }
 
+
+
 .table_line {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr;
     color: #686484;
     font-size: 1rem;
     text-decoration: none;
@@ -119,6 +121,23 @@ a {
     background: #ecebef;
     margin: 0;
     padding: 0;
+}
+
+
+.columns-2{
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.columns-3{
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.columns-4{
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.columns-5{
+    grid-template-columns: repeat(5, 1fr);
 }
 
 .table_line:hover {
