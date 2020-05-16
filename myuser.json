@@ -1,0 +1,32 @@
+[
+{
+    "model": "users.myuser",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$180000$HAlAtKM7Jswh$mB0TCtXAf89mpiOik5JjiwB2mZZhfgKytuoo6mMntUk=",
+        "email": "john.wick@continental.un",
+        "username": "john",
+        "date_joined": "2020-05-16T20:24:05.205Z",
+        "last_login": "2020-05-16T20:24:05.308Z",
+        "is_admin": false,
+        "is_active": true,
+        "is_staff": false,
+        "is_superuser": false
+    }
+},
+{
+    "model": "users.myuser",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$180000$WVTa381faqxW$5B96cBdSEYPJz5wnczeDalzNcXw9siYhKU+x47/9XIU=",
+        "email": "jane.bane@gotham.un",
+        "username": "jane",
+        "date_joined": "2020-05-16T20:26:59.979Z",
+        "last_login": "2020-05-16T20:27:00.097Z",
+        "is_admin": false,
+        "is_active": true,
+        "is_staff": false,
+        "is_superuser": false
+    }
+}
+]
