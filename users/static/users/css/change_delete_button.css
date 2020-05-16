@@ -1,0 +1,40 @@
+.options-wrapper {
+    display: table;
+    height: 75px;
+
+}
+
+.option_1 {
+    display: table-cell;
+    vertical-align: middle;
+    border: #686484 2px solid;
+    border-radius: 50% 0 0 50%;
+    width: 100px;
+    background: #ecebef;
+    color: #686484;
+    padding: 1rem 1rem 1rem 2rem;
+}
+
+.option_1:hover {
+    background-color: #fff9f0;
+    color: #D8B60E;
+    text-decoration: none;
+}
+
+.option_2 {
+    display: table-cell;
+    vertical-align: middle;
+    border: #686484 2px solid;
+    border-left: none;
+    border-radius: 0 50% 50% 0;
+    width: 100px;
+    background: #ecebef;
+    color: #686484;
+    padding: 1rem 2rem 1rem 1rem;
+}
+
+.option_2:hover {
+    background-color: #fff5f5;
+    color: red;
+    text-decoration: none;
+}

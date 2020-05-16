@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block title %}|Account{% endblock %}
+{% block stylesheet %}<link rel="stylesheet" href="{% static 'users/css/change_delete_button.css' %}">{% endblock %}
 {% block sidebar %}{% include "users/sidebar.html" %}{% endblock %}
 {% block body_title %}My Account{% endblock %}
 
@@ -17,5 +18,13 @@
             <div class="line_item">{{ request.user.email }}</div>
             <div class="line_item">{{ date_registered }}</div>
         </div>
+    </div>
+    <div class="center">
+        <div class="inline-block">
+        <div class="options-wrapper">
+            <a class="option_1" href="{% url 'users:change' %}">CHANGE</a>
+            <a class="option_2" href="{% url 'users:delete' %}">DELETE</a>
+        </div>
+    </div>
     </div>
 {% endblock %}

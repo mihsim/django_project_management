@@ -16,12 +16,13 @@ section{
 }
 
 header{
-    background: #1D0266;
+    background: #433e66;
     height: 3rem;
 }
 
 footer{
-    background: #D2C8EE;
+    background: #7b7793;
+    color: #ecebef;
     width: 100%;
     text-align: center;
     height: 2rem;
@@ -31,9 +32,19 @@ a {
     text-decoration: none;
 }
 
+/* Utils */
+.center {
+    text-align: center;
+}
+.inline-block {
+    display: inline-block;
+}
+
 /* Navbar */
 .navbar-brand {
+    color: #d9d8e0;
     font-family: 'Audiowide', cursive;
+    margin: auto;
 }
 
 /* sidebar */
@@ -49,7 +60,7 @@ a {
 #sidebar {
     z-index: 100;
     height: 100%;
-    background: #270485;
+    background: #555175;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -57,11 +68,11 @@ a {
 }
 
 #sidebar .nav .nav-item:hover {
-    background: #3306AC;
+    background: #686484;
 }
 
 #sidebar .nav a{
-  border-bottom: 1px solid #455A64;
+  border-bottom: 1px solid #8e8ba3;
   color: #CFD8DC;
   font-size: 14px;
   padding: 16px 24px;
@@ -103,9 +114,9 @@ a {
     display: grid;
     grid-gap: 0.2rem;
     background-color: #686484;
-
     padding: 3px;
     border-radius: 10px;
+    margin: 1rem 0 3rem 0;
 }
 
 .table_line {
@@ -172,8 +183,9 @@ a {
     border-right: none;
 }
 
-/* Buttons */
+/* Buttons
 
 .button {
 
 }
+*/
