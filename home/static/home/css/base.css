@@ -32,6 +32,14 @@ a {
     text-decoration: none;
 }
 
+/* Utils */
+.center {
+    text-align: center;
+}
+.inline-block {
+    display: inline-block;
+}
+
 /* Navbar */
 .navbar-brand {
     color: #d9d8e0;
