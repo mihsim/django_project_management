@@ -2,18 +2,17 @@
 {% load static %}
 
 {% block title %}|Account{% endblock %}
-{% block stylesheet %}<link rel="stylesheet" href="{% static 'users/css/table_col_3.css' %}">{% endblock %}
 {% block sidebar %}{% include "users/sidebar.html" %}{% endblock %}
 {% block body_title %}My Account{% endblock %}
 
 {% block body_content %}
     <div class="table_wrapper">
-        <div class="table_line">
+        <div class="table_line columns-3">
             <div class="line_item">Username</div>
             <div class="line_item">Email</div>
             <div class="line_item">Date joined</div>
         </div>
-        <div class="table_line">
+        <div class="table_line columns-3">
             <div class="line_item">{{ request.user.username }}</div>
             <div class="line_item">{{ request.user.email }}</div>
             <div class="line_item">{{ date_registered }}</div>

@@ -10,17 +10,17 @@ from .models import Project, ProjectParticipants, ProjectParticipantsInvites
 class ProjectView(View):
     def get(self, request, project_id):
         project = Project.objects.get(id=project_id)
-        content = {"project": project}
-        return render(request, "project/project.html", content)
+        context = {"project": project}
+        return render(request, "project/project.html", context)
 
     @classmethod
     def participants(cls, request, project_id):
         project = Project.objects.get(id=project_id)
-        content = {"project": project}
+        context = {"project": project}
         project_participants = cls.get_project_participants(project_id)
         project_invitees = cls.get_invited_to_participate(request, project_id)
-        content.update(**project_participants, **project_invitees)
-        return render(request, "project/participants.html", content)
+        context.update(**project_participants, **project_invitees)
+        return render(request, "project/participants.html", context)
 
     @staticmethod
     def get_project_participants(project_id: int) -> Dict[str, List]:
@@ -45,9 +45,9 @@ class ProjectView(View):
             project.delete()
             return redirect('projects:overview')
         elif request.method == "GET":
-            content = {'project': project,
+            context = {'project': project,
                        'warning_message': 'Deleted project can not be restored!'}
-            return render(request, 'project/delete.html', content)
+            return render(request, 'project/delete.html', context)
         else:
             # If request.method was 'POST' but user was not administrator for project:
             return redirect('home:home')
@@ -56,8 +56,8 @@ class ProjectView(View):
 class ProjectChangeView(View):
     def get(self, request, project_id):
         project = Project.objects.get(pk=project_id)
-        content = {"project": project}
-        return render(request, "project/change.html", content)
+        context = {"project": project}
+        return render(request, "project/change.html", context)
 
     def post(self, request, project_id):
         project = Project.objects.filter(id=project_id).first()
@@ -93,14 +93,14 @@ class CreateInviteToProject(View):
                                                                               from_user_id=request.user.id,
                                                                               to_user_id=participant_id)
         project = Project.objects.get(id=project_id)
-        content = {'project': project,
+        context = {'project': project,
                    "invite_result": invite_result,
                    "invite_message": invite_message}
         if invite_result == "Successful":
-            return render(request, "project/project.html", content)
+            return render(request, "project/project.html", context)
         else:
             request.method = "GET"
-            return render(request, "project/search_participants.html", content)
+            return render(request, "project/search_participants.html", context)
 
 
 class ManageInvite(View):

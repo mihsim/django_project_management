@@ -15,12 +15,15 @@ class Projects(View):
     """
     def get(self, request):
         user = MyUser.objects.get(id=request.user.pk)
-        projects_user_is_administrator_to = Project.objects.filter(administrator=user)
-        projects_user_is_participant_to = ProjectParticipants.objects.filter(user=user)
-        projects_user_is_invited_to = ProjectParticipantsInvites.objects.filter(to_user=user)
-        return render(request, "projects/overview.html", {'administrator_to_projects': projects_user_is_administrator_to,
-                                                     'participations_to_projects': projects_user_is_participant_to,
-                                                     'invitations_to_projects': projects_user_is_invited_to})
+        administrator_to = Project.objects.filter(administrator=user)
+        participant_to = ProjectParticipants.objects.filter(user=user).exclude(project__administrator=user)
+        invited_to = ProjectParticipantsInvites.objects.filter(to_user=user)
+        context = {
+            'administrator_to_projects': administrator_to,
+            'participant_to_projects': participant_to,
+            'invited_to_projects': invited_to,
+        }
+        return render(request, "projects/overview.html", context)
 
 
 class Create(View):
